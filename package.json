@@ -1,0 +1,101 @@
+{
+   "name": "recursive-exec",
+   "version": "0.0.0",
+   "description": "Run a command on each file in a folder and its subfolders (CLI tool designed for use in npm scripts)",
+   "license": "MIT",
+   "type": "module",
+   "module": "dist/recursive-exec.js",
+   "main": "dist/recursive-exec.js",
+   "types": "dist/recursive-exec.d.ts",
+   "files": [
+      "dist"
+   ],
+   "exports": {
+      ".": {
+         "import": "./dist/recursive-exec.js"
+      },
+      "./": "./dist/"
+   },
+   "bin": {
+      "recursive-exec": "bin/cli.js"
+   },
+   "repository": "github:center-key/recursive-exec",
+   "homepage": "https://github.com/center-key/recursive-exec",
+   "bugs": "https://github.com/center-key/recursive-exec/issues",
+   "docs": "https://github.com/center-key/recursive-exec#readme",
+   "author": "Center Key (https://centerkey.com)",
+   "keywords": [
+      "build",
+      "cli",
+      "command",
+      "find",
+      "npm-scripts",
+      "npm",
+      "recursive",
+      "scripts",
+      "task"
+   ],
+   "jshintConfig": {
+      "esversion": 11,
+      "strict": "implied",
+      "eqeqeq": true,
+      "undef": true,
+      "unused": true,
+      "varstmt": true,
+      "node": true,
+      "mocha": true
+   },
+   "eslintConfig": {
+      "ignorePatterns": [
+         "build",
+         "dist",
+         "node_modules"
+      ],
+      "root": true,
+      "parser": "@typescript-eslint/parser",
+      "plugins": [
+         "@typescript-eslint"
+      ],
+      "extends": [
+         "eslint:recommended",
+         "plugin:@typescript-eslint/recommended"
+      ],
+      "rules": {
+         "@typescript-eslint/no-non-null-assertion": "off"
+      }
+   },
+   "runScriptsConfig": {
+      "clean": [
+         "rimraf build dist spec/fixtures/target"
+      ],
+      "build": [
+         "jshint . --exclude-path .gitignore",
+         "eslint --max-warnings 0 . --ext .ts",
+         "tsc",
+         "add-dist-header build dist"
+      ]
+   },
+   "scripts": {
+      "pretest": "run-scripts clean build",
+      "test": "mocha spec/*.spec.js"
+   },
+   "dependencies": {
+      "chalk": "~5.3",
+      "cli-argv-util": "~1.2",
+      "fancy-log": "~2.0"
+   },
+   "devDependencies": {
+      "@types/fancy-log": "~2.0",
+      "@types/node": "~20.4",
+      "@typescript-eslint/eslint-plugin": "~6.3",
+      "@typescript-eslint/parser": "~6.3",
+      "add-dist-header": "~1.2",
+      "assert-deep-strict-equal": "~1.1",
+      "eslint": "~8.46",
+      "jshint": "~2.13",
+      "mocha": "~10.2",
+      "rimraf": "~5.0",
+      "run-scripts-util": "~1.2",
+      "typescript": "~5.1"
+   }
+}
