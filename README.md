@@ -9,9 +9,6 @@ _Run a command on each file in a folder and its subfolders (CLI tool designed fo
 
 **recursive-exec** is `find -type f -exec` for use in your project's **package.json** file.
 
-<img src=https://raw.githubusercontent.com/center-key/recursive-exec/main/screenshot.png
-width=800 alt=screenshot>
-
 ## A) Setup
 Install package for node:
 ```shell
