@@ -26,26 +26,26 @@ Parameters:
 Example **package.json** scripts:
 ```json
    "scripts": {
-      "minimize-js": "recursive-exec build/web --ext=.js 'uglifyjs build/web/{{filename}} --output dist/web/{{basename}}.min.js'"
+      "minimize-js": "recursive-exec build/web --ext=.js 'uglifyjs {{file}} --output dist/web/{{basename}}.min.js'"
    },
 ```
 
 The command template supports 4 variables:
 | Variable       | Description                                                  | Example                       |
 | -------------- | ------------------------------------------------------------ | ----------------------------- |
+| `{{file}}`     | Full path including filename.                                | `'build/web/libraries/d3.js'` |
 | `{{filename}}` | Relative path including filename.                            | `'libraries/d3.js'`           |
 | `{{basename}}` | Relative path including filename without the file extension. | `'libraries/d3'`              |
 | `{{path}}`     | Relative path without filename.                              | `'libraries'`                 |
-| `{{file}}`     | Full path including filename.                                | `'build/web/libraries/d3.js'` |
 
-### 2. Global
-You can install **recursive-exec** globally and then run it anywhere directly from the terminal.
-
+### 2. Using with npx
 Example terminal command to minimize JavaScript files:
 ```shell
-$ npm install --global recursive-exec
-$ recursive-exec build/web --ext=.js "uglifyjs build/web/{{filename}} --output dist/web/{{basename}}.min.js"
+$ npm install --save-dev recursive-exec
+$ npx recursive-exec build/web --ext=.js "uglifyjs {{file}} --output dist/web/{{basename}}.min.js"
 ```
+
+You can also install **recursive-exec** globally and then run it anywhere directly from the terminal.
 
 ### 3. CLI flags
 Command-line flags:
@@ -56,14 +56,20 @@ Command-line flags:
 | `--quiet`    | Suppress informational messages.                      | N/A        |
 
 Examples:
-   - `recursive-exec src/web --ext=.less 'lessc src/web/{{filename}} build/web/{{basename}}.css'"`<br>
+   - `recursive-exec src/web --ext=.less 'lessc src/web/{{filename}} build/web/{{basename}}.css'`<br>
    Compile all LESS files in the **src/web** folder into CSS files in the **build/web** folder.
 
-   - `recursive-exec build/web --ext=.css 'csso build/web/{{filename}} --output dist/web/{{filename}}'"`<br>
-   Optimize the CSS files in **build/web** and save the new files to the **dist/web** folder.
+   - `recursive-exec src/web --ext=.less 'lessc {{file}} build/web/{{basename}}.css'`<br>
+   Identical to the previous example since `{{file}}` includes the **source** folder (`src/web`) in the path.
 
-   - `recursive-exec build/web --ext=.js 'uglifyjs build/web/{{filename}} --output dist/web/{{basename}}.min.js'"`<br>
-   Minimize the JavaScript files in **build/web** and save the new files to the **dist/web** folder with the **.min.js** file extension.
+   - `recursive-exec build/web --ext=.css 'csso {{file}} --output dist/web/{{filename}}'`<br>
+   Optimize the CSS files in the **build/web** folder and save the new files to the **dist/web** folder.
+
+   - `recursive-exec build/web --ext=.js 'uglifyjs {{file}} --output dist/web/{{basename}}.min.js'`<br>
+   Minimize the JavaScript files in the **build/web** folder and save the new files to the **dist/web** folder with the **.min.js** file extension.
+
+   - `recursive-exec src 'npx glob {{file}}'`<br>
+   List out all source files.
 
 ## C) Application Code
 Even though **recursive-exec** is primarily intended for build scripts, the package can easily be used programmatically in ESM and TypeScript projects.

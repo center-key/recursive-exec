@@ -1,4 +1,4 @@
-//! recursive-exec v0.0.1 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
+//! recursive-exec v0.0.2 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
 
 export type Settings = {
     extensions: string[] | null;

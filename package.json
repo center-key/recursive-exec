@@ -1,6 +1,6 @@
 {
    "name": "recursive-exec",
-   "version": "0.0.1",
+   "version": "0.0.2",
    "description": "Run a command on each file in a folder and its subfolders (CLI tool designed for use in npm scripts)",
    "license": "MIT",
    "type": "module",
