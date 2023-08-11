@@ -42,8 +42,8 @@ const recursiveExec = {
       const startTime =  Date.now();
       const source =     slash(path.normalize(folder)).replace(/\/$/, '');
       const logName =    chalk.gray('recursive-exec');
-      const getExts =    () => settings.extensions!.join(',').replaceAll('.', '');
-      const extensions = !settings.extensions ? '' : `.{${getExts()}}`;
+      const getExts =    () => settings.extensions!.join('|');
+      const extensions = !settings.extensions ? '' : `@(${getExts()})`;
       const files =      globSync(source + '/**/*' + extensions, { ignore: '**/node_modules/**/*', nodir: true }).sort();
       if (!settings.quiet)
          log(logName, chalk.magenta(source));

@@ -6,19 +6,21 @@
 
 // Usage in package.json:
 //    "scripts": {
-//       "make-css": "recursive-exec src/web --ext=.less 'lessc src/web/{{filename}} build/web/{{basename}}.css'",
-//       "minimize-css": "recursive-exec build/web --ext=.css 'csso build/web/{{filename}} --output dist/web/{{filename}}'",
-//       "minimize-js": "recursive-exec build/web --ext=.js 'uglifyjs build/web/{filename}} --output dist/web/{{basename}}.min.js'"
+//       "make-css": "recursive-exec src/web --ext=.less 'lessc {{file}} build/web/{{basename}}.css'",
+//       "minimize-css": "recursive-exec build/web --ext=.css 'csso {{file}} --output dist/{{filename}}'",
+//       "minimize-js": "recursive-exec build --ext=.js 'uglifyjs {{file}} --output dist/{{basename}}.min.js'"
 //    },
 //
 // Contributors to this project:
 //    $ cd recursive-exec
 //    $ npm install
 //    $ npm test
-//    $ node bin/cli.js spec/fixtures/source --ext=.js,.css 'echo {{filename}}'
+//    $ node bin/cli.js spec/fixtures/source --ext=.js,.css 'npx glob {{file}}'
 
 // Imports
 import { cliArgvUtil } from 'cli-argv-util';
+
+// Modules
 import { recursiveExec } from '../dist/recursive-exec.js';
 
 // Parameters and flags

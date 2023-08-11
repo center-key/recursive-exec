@@ -77,12 +77,14 @@
    },
    "scripts": {
       "pretest": "run-scripts clean build",
-      "test": "mocha spec/*.spec.js"
+      "test": "mocha spec/*.spec.js --timeout 7000"
    },
    "dependencies": {
       "chalk": "~5.3",
       "cli-argv-util": "~1.2",
-      "fancy-log": "~2.0"
+      "fancy-log": "~2.0",
+      "glob": "~10.3",
+      "slash": "~5.1"
    },
    "devDependencies": {
       "@types/fancy-log": "~2.0",
@@ -91,11 +93,14 @@
       "@typescript-eslint/parser": "~6.3",
       "add-dist-header": "~1.2",
       "assert-deep-strict-equal": "~1.1",
+      "csso-cli": "~4.0",
       "eslint": "~8.46",
       "jshint": "~2.13",
+      "less": "~4.2",
       "mocha": "~10.2",
       "rimraf": "~5.0",
       "run-scripts-util": "~1.2",
-      "typescript": "~5.1"
+      "typescript": "~5.1",
+      "uglify-js": "~3.17"
    }
 }
