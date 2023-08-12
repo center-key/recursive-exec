@@ -9,6 +9,9 @@ _Run a command on each file in a folder and its subfolders (CLI tool designed fo
 
 **recursive-exec** is `find -type f -exec` for use in your project's **package.json** file.
 
+<img src=https://raw.githubusercontent.com/center-key/recursive-exec/main/screenshot.png
+width=800 alt=screenshot>
+
 ## A) Setup
 Install package for node:
 ```shell
@@ -65,10 +68,13 @@ Examples:
    - `recursive-exec build/web --ext=.css 'csso {{file}} --output dist/web/{{filename}}'`<br>
    Optimize the CSS files in the **build/web** folder and save the new files to the **dist/web** folder.
 
+   - `recursive-exec build/web --ext=.js --quiet "make-dir dist/web/{{path}}"`<br>
+   Duplicate the folder structure from **build/web** over to **dist/web** (first run `npm install --save-dev make-dir-cli`).
+
    - `recursive-exec build/web --ext=.js 'uglifyjs {{file}} --output dist/web/{{basename}}.min.js'`<br>
    Minimize the JavaScript files in the **build/web** folder and save the new files to the **dist/web** folder with the **.min.js** file extension.
 
-   - `recursive-exec src 'npx glob {{file}}'`<br>
+   - `recursive-exec src 'glob {{file}}'`<br>
    List out all source files.
 
 ## C) Application Code

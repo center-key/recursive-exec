@@ -49,7 +49,8 @@ const recursiveExec = {
          log(logName, chalk.magenta(source));
       const calcResult = (file: string) => {
          const filename = file.substring(source.length + 1);
-         const relPath =  file.substring(source.length + 1, file.length - path.basename(file).length - 1);
+         const endIndex = Math.max(source.length + 1, file.length - path.basename(file).length - 1);
+         const relPath =  file.substring(source.length + 1, endIndex);
          const basename = filename.substring(0, filename.length - path.extname(filename).length);
          const interpolate = (template: string) => template
             .replaceAll('{{basename}}', basename)

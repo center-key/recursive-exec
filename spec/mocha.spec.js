@@ -47,28 +47,28 @@ describe('Calling recursiveExec.find()', () => {
 
    it('for HTML and LESS files returns an array listing the correct files', () => {
       const folder =  'spec/fixtures/source';
-      const command = 'npx glob {{file}}';
+      const command = 'glob {{file}}';
       const actual = recursiveExec.find(folder, command, { extensions: ['.html', '.less'] });
       const expected = [
          {
             basename: 'mock1',
-            command:  'npx glob spec/fixtures/source/mock1.html',
+            command:  'glob spec/fixtures/source/mock1.html',
             file:     'spec/fixtures/source/mock1.html',
             filename: 'mock1.html',
             folder:   'spec/fixtures/source',
-            path:     '/',
+            path:     '',
             },
          {
             basename: 'mock1',
-            command:  'npx glob spec/fixtures/source/mock1.less',
+            command:  'glob spec/fixtures/source/mock1.less',
             file:     'spec/fixtures/source/mock1.less',
             filename: 'mock1.less',
             folder:   'spec/fixtures/source',
-            path:     '/',
+            path:     '',
             },
          {
             basename: 'subfolder/mock2',
-            command:  'npx glob spec/fixtures/source/subfolder/mock2.html',
+            command:  'glob spec/fixtures/source/subfolder/mock2.html',
             file:     'spec/fixtures/source/subfolder/mock2.html',
             filename: 'subfolder/mock2.html',
             folder:   'spec/fixtures/source',
@@ -76,7 +76,7 @@ describe('Calling recursiveExec.find()', () => {
             },
          {
             basename: 'subfolder/mock2',
-            command:  'npx glob spec/fixtures/source/subfolder/mock2.less',
+            command:  'glob spec/fixtures/source/subfolder/mock2.less',
             file:     'spec/fixtures/source/subfolder/mock2.less',
             filename: 'subfolder/mock2.less',
             folder:   'spec/fixtures/source',
@@ -121,7 +121,7 @@ describe('Executing the CLI', () => {
       });
 
    it('to optimize CSS files preserves the source folder structure', () => {
-      fs.mkdirSync('spec/fixtures/target/css-min/subfolder', { recursive: true });
+      run('recursive-exec spec/fixtures/source --ext=.js "make-dir spec/fixtures/target/css-min/{{path}}" --quiet');
       run('recursive-exec spec/fixtures/target/css "csso {{file}} --output spec/fixtures/target/css-min/{{basename}}.min.css"');
       const actual = fs.readdirSync('spec/fixtures/target/css-min', { recursive: true }).sort();
       const expected = [
@@ -133,7 +133,7 @@ describe('Executing the CLI', () => {
       });
 
    it('to minimize JS files preserves the source folder structure', () => {
-      fs.mkdirSync('spec/fixtures/target/js/subfolder', { recursive: true });
+      run('recursive-exec spec/fixtures/source --ext=.js --quiet "make-dir spec/fixtures/target/js/{{path}}"');
       run('recursive-exec spec/fixtures/source --ext=.js "uglifyjs {{file}} --output spec/fixtures/target/js/{{basename}}.min.js"');
       const actual = fs.readdirSync('spec/fixtures/target/js', { recursive: true }).sort();
       const expected = [
