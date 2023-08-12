@@ -1,4 +1,4 @@
-//! recursive-exec v0.0.2 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
+//! recursive-exec v0.0.3 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
 
 import { globSync } from 'glob';
 import { spawnSync } from 'node:child_process';
@@ -31,7 +31,8 @@ const recursiveExec = {
             log(logName, chalk.magenta(source));
         const calcResult = (file) => {
             const filename = file.substring(source.length + 1);
-            const relPath = file.substring(source.length + 1, file.length - path.basename(file).length - 1);
+            const endIndex = Math.max(source.length + 1, file.length - path.basename(file).length - 1);
+            const relPath = file.substring(source.length + 1, endIndex);
             const basename = filename.substring(0, filename.length - path.extname(filename).length);
             const interpolate = (template) => template
                 .replaceAll('{{basename}}', basename)
