@@ -66,7 +66,7 @@ const recursiveExec = {
             command:  interpolate(command),
             };
          };
-      const results = files.map(calcResult);
+      const results = files.map(slash).map(calcResult);
       const execCommand = (result: Result) => {
          if (!settings.quiet)
             log(logName, chalk.blue.bold('command:'), chalk.cyanBright(result.command));

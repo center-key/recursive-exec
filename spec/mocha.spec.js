@@ -6,6 +6,7 @@ import { assertDeepStrictEqual } from 'assert-deep-strict-equal';
 import { cliArgvUtil } from 'cli-argv-util';
 import assert from 'assert';
 import fs     from 'fs';
+import slash  from 'slash';
 
 // Setup
 import { recursiveExec } from '../dist/recursive-exec.js';
@@ -108,10 +109,11 @@ describe('Correct error is thrown', () => {
 ////////////////////////////////////////////////////////////////////////////////
 describe('Executing the CLI', () => {
    const run = (posix) => cliArgvUtil.run(pkg, posix);
+   const readFiles = (folder) => fs.readdirSync(folder, { recursive: true }).map(slash).sort();
 
    it('to compile LESS files to CSS preserves the source folder structure', () => {
       run('recursive-exec spec/fixtures/source --ext=.less "lessc {{file}} spec/fixtures/target/css/{{basename}}.css"');
-      const actual = fs.readdirSync('spec/fixtures/target/css', { recursive: true }).sort();
+      const actual = readFiles('spec/fixtures/target/css');
       const expected = [
          'mock1.css',
          'subfolder',
@@ -123,7 +125,7 @@ describe('Executing the CLI', () => {
    it('to optimize CSS files preserves the source folder structure', () => {
       run('recursive-exec spec/fixtures/source --ext=.js "make-dir spec/fixtures/target/css-min/{{path}}" --quiet');
       run('recursive-exec spec/fixtures/target/css "csso {{file}} --output spec/fixtures/target/css-min/{{basename}}.min.css"');
-      const actual = fs.readdirSync('spec/fixtures/target/css-min', { recursive: true }).sort();
+      const actual = readFiles('spec/fixtures/target/css-min');
       const expected = [
          'mock1.min.css',
          'subfolder',
@@ -135,7 +137,7 @@ describe('Executing the CLI', () => {
    it('to minimize JS files preserves the source folder structure', () => {
       run('recursive-exec spec/fixtures/source --ext=.js --quiet "make-dir spec/fixtures/target/js/{{path}}"');
       run('recursive-exec spec/fixtures/source --ext=.js "uglifyjs {{file}} --output spec/fixtures/target/js/{{basename}}.min.js"');
-      const actual = fs.readdirSync('spec/fixtures/target/js', { recursive: true }).sort();
+      const actual = readFiles('spec/fixtures/target/js');
       const expected = [
          'mock1.min.js',
          'subfolder',
