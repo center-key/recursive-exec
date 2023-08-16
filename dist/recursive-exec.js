@@ -1,4 +1,4 @@
-//! recursive-exec v0.0.3 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
+//! recursive-exec v0.0.4 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
 
 import { globSync } from 'glob';
 import { spawnSync } from 'node:child_process';
@@ -48,7 +48,7 @@ const recursiveExec = {
                 command: interpolate(command),
             };
         };
-        const results = files.map(calcResult);
+        const results = files.map(slash).map(calcResult);
         const execCommand = (result) => {
             if (!settings.quiet)
                 log(logName, chalk.blue.bold('command:'), chalk.cyanBright(result.command));

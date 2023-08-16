@@ -41,14 +41,13 @@ The command template supports 4 variables:
 | `{{basename}}` | Relative path including filename without the file extension. | `'libraries/d3'`              |
 | `{{path}}`     | Relative path without filename.                              | `'libraries'`                 |
 
-### 2. Using with npx
+### 2. Command-line npx
 Example terminal command to minimize JavaScript files:
 ```shell
 $ npm install --save-dev recursive-exec
 $ npx recursive-exec build/web --ext=.js "uglifyjs {{file}} --output dist/web/{{basename}}.min.js"
 ```
-
-You can also install **recursive-exec** globally and then run it anywhere directly from the terminal.
+You can also install **recursive-exec** globally (`--global`) and then run it anywhere directly from the terminal.
 
 ### 3. CLI flags
 Command-line flags:
