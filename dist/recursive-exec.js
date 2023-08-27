@@ -1,4 +1,4 @@
-//! recursive-exec v0.0.4 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
+//! recursive-exec v0.1.0 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
 
 import { globSync } from 'glob';
 import { spawnSync } from 'node:child_process';
@@ -10,6 +10,7 @@ import slash from 'slash';
 const recursiveExec = {
     find(folder, command, options) {
         const defaults = {
+            excludes: null,
             extensions: null,
             quiet: false,
         };
@@ -26,29 +27,38 @@ const recursiveExec = {
         const logName = chalk.gray('recursive-exec');
         const getExts = () => settings.extensions.join('|');
         const extensions = !settings.extensions ? '' : `@(${getExts()})`;
-        const files = globSync(source + '/**/*' + extensions, { ignore: '**/node_modules/**/*', nodir: true }).sort();
+        const files = globSync(source + '/**/*' + extensions, { ignore: '**/node_modules/**/*', nodir: true });
+        const excludes = settings?.excludes || [];
+        const keep = (file) => !excludes.find(exclude => file.includes(exclude));
+        const toCamel = (token) => token.replace(/-./g, char => char[1].toUpperCase());
         if (!settings.quiet)
             log(logName, chalk.magenta(source));
         const calcResult = (file) => {
+            const parts = path.parse(file);
             const filename = file.substring(source.length + 1);
-            const endIndex = Math.max(source.length + 1, file.length - path.basename(file).length - 1);
-            const relPath = file.substring(source.length + 1, endIndex);
+            const relative = parts.dir.substring(source.length + 1);
             const basename = filename.substring(0, filename.length - path.extname(filename).length);
             const interpolate = (template) => template
-                .replaceAll('{{basename}}', basename)
                 .replaceAll('{{file}}', file)
                 .replaceAll('{{filename}}', filename)
-                .replaceAll('{{path}}', relPath);
+                .replaceAll('{{basename}}', basename)
+                .replaceAll('{{path}}', relative)
+                .replaceAll('{{name}}', parts.name)
+                .replaceAll('{{nameCamelCase}}', toCamel(parts.name));
             return {
                 folder: source,
                 file: file,
-                path: relPath,
+                path: relative,
                 filename: filename,
                 basename: basename,
+                name: parts.name,
                 command: interpolate(command),
             };
         };
-        const results = files.map(slash).map(calcResult);
+        const results = files.map(slash).filter(keep).sort().map(calcResult);
+        const previewCommand = (result) => {
+            log(logName, chalk.blue.bold('preview:'), chalk.yellow(result.command));
+        };
         const execCommand = (result) => {
             if (!settings.quiet)
                 log(logName, chalk.blue.bold('command:'), chalk.cyanBright(result.command));
@@ -56,7 +66,7 @@ const recursiveExec = {
             if (task.status !== 0)
                 throw Error(`[recursive-exec] Status: ${task.status}\nCommand: ${result.command}`);
         };
-        results.forEach(execCommand);
+        results.forEach(settings.echo ? previewCommand : execCommand);
         const summary = `(files: ${results.length}, ${Date.now() - startTime}ms)`;
         if (!settings.quiet)
             log(logName, chalk.green('done'), chalk.white(summary));
