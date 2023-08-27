@@ -53,12 +53,13 @@ You can also install **recursive-exec** globally (`--global`) and then run it an
 
 ### 3. CLI flags
 Command-line flags:
-| Flag         | Description                                               | Value      |
-| ------------ | --------------------------------------------------------- | ---------- |
-| `--echo`     | Show dry run preview of each command without executig it. | N/A        |
+| Flag         | Description                                                | Value      |
+| ------------ | ---------------------------------------------------------- | ---------- |
+| `--echo`     | Show dry run preview of each command without executig it.  | N/A        |
+| `--exclude`  | Comma separated list of strings to match in paths to skip. | **string** |
 | `--ext`      | Filter files by file extension, such as `.js`.<br>Use a comma to specify multiple extensions. | **string** |
-| `--note`     | Place to add a comment only for humans.                   | **string** |
-| `--quiet`    | Suppress informational messages.                          | N/A        |
+| `--note`     | Place to add a comment only for humans.                    | **string** |
+| `--quiet`    | Suppress informational messages.                           | N/A        |
 
 Examples:
    - `recursive-exec src/web --ext=.less 'lessc src/web/{{filename}} build/web/{{basename}}.css'`<br>

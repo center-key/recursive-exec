@@ -12,6 +12,7 @@ import slash from 'slash';
 // Types
 export type Settings = {
    echo:       boolean,          //show dry run preview of each command without executig it
+   excludes:   string[] | null,  //list of strings to match in paths to skip
    extensions: string[] | null,  //filter files by file extensions, example: ['.js', '.css']
    quiet:      boolean,          //suppress informational messages
    };
@@ -29,6 +30,7 @@ const recursiveExec = {
 
    find(folder: string, command: string, options?: Partial<Settings>): Result[] {
       const defaults = {
+         excludes:   null,
          extensions: null,
          quiet:      false,
          };
@@ -46,7 +48,9 @@ const recursiveExec = {
       const logName =    chalk.gray('recursive-exec');
       const getExts =    () => settings.extensions!.join('|');
       const extensions = !settings.extensions ? '' : `@(${getExts()})`;
-      const files =      globSync(source + '/**/*' + extensions, { ignore: '**/node_modules/**/*', nodir: true }).sort();
+      const files =      globSync(source + '/**/*' + extensions, { ignore: '**/node_modules/**/*', nodir: true });
+      const excludes =   settings?.excludes || [];
+      const keep =       (file: string) => !excludes.find(exclude => file.includes(exclude));
       const toCamel =    (token: string) => token.replace(/-./g, char => char[1]!.toUpperCase());  //ex: 'fetch-json' --> 'fetchJson'
       if (!settings.quiet)
          log(logName, chalk.magenta(source));
@@ -72,7 +76,7 @@ const recursiveExec = {
             command:  interpolate(command),
             };
          };
-      const results = files.map(slash).map(calcResult);
+      const results = files.map(slash).filter(keep).sort().map(calcResult);
       const previewCommand = (result: Result) => {
          log(logName, chalk.blue.bold('preview:'), chalk.yellow(result.command));
          };

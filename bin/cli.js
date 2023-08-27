@@ -24,7 +24,7 @@ import { cliArgvUtil } from 'cli-argv-util';
 import { recursiveExec } from '../dist/recursive-exec.js';
 
 // Parameters and flags
-const validFlags = ['echo', 'ext', 'note', 'quiet'];
+const validFlags = ['echo', 'exclude', 'ext', 'note', 'quiet'];
 const cli =        cliArgvUtil.parse(validFlags);
 const folder =     cli.params[0];
 const command =    cli.params[1];
@@ -40,6 +40,7 @@ if (error)
    throw Error('[recursive-exec] ' + error);
 const options = {
    echo:       cli.flagOn.echo,
+   excludes:   cli.flagMap.exclude?.split(',') ?? null,
    quiet:      cli.flagOn.quiet,
    extensions: cli.flagMap.ext?.split(',') ?? null,
    };

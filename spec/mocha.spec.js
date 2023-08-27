@@ -161,4 +161,16 @@ describe('Executing the CLI', () => {
       assertDeepStrictEqual(actual, expected);
       });
 
+   it('with the --exclude flag skips over the excluded files', () => {
+      const template = 'copy-file {{file}} spec/fixtures/target/exclude/{{filename}}';
+      run(`recursive-exec spec/fixtures/source --exclude=file1,html "${template}"`);
+      const actual = cliArgvUtil.readFolder('spec/fixtures/target/exclude');
+      const expected = [
+         'subfolder',
+         'subfolder/mock-file2.js',
+         'subfolder/mock-file2.less',
+         ];
+      assertDeepStrictEqual(actual, expected);
+      });
+
    });
