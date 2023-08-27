@@ -149,7 +149,9 @@ describe('Executing the CLI', () => {
       });
 
    it('to rename copies of files with camel case names preserves the source folder structure', () => {
-      run('recursive-exec spec/fixtures/source --ext=.html "copy-file {{file}} spec/fixtures/target/html/{{path}}/{{name}}.{{nameCamelCase}}.html"');
+      const template = 'copy-file {{file}} spec/fixtures/target/html/{{path}}/{{name}}.{{nameCamelCase}}.html';
+      run(`recursive-exec spec/fixtures/source --ext=.html --echo "${template}"`);
+      run(`recursive-exec spec/fixtures/source --ext=.html "${template}"`);
       const actual = cliArgvUtil.readFolder('spec/fixtures/target/html');
       const expected = [
          'mock-file1.mockFile1.html',

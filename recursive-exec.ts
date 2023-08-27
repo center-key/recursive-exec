@@ -11,6 +11,7 @@ import slash from 'slash';
 
 // Types
 export type Settings = {
+   echo:       boolean,          //show dry run preview of each command without executig it
    extensions: string[] | null,  //filter files by file extensions, example: ['.js', '.css']
    quiet:      boolean,          //suppress informational messages
    };
@@ -72,6 +73,9 @@ const recursiveExec = {
             };
          };
       const results = files.map(slash).map(calcResult);
+      const previewCommand = (result: Result) => {
+         log(logName, chalk.blue.bold('preview:'), chalk.yellow(result.command));
+         };
       const execCommand = (result: Result) => {
          if (!settings.quiet)
             log(logName, chalk.blue.bold('command:'), chalk.cyanBright(result.command));
@@ -79,7 +83,7 @@ const recursiveExec = {
          if (task.status !== 0)
             throw Error(`[recursive-exec] Status: ${task.status}\nCommand: ${result.command}`);
          };
-      results.forEach(execCommand);
+      results.forEach(settings.echo ? previewCommand : execCommand);
       const summary = `(files: ${results.length}, ${Date.now() - startTime}ms)`;
       if (!settings.quiet)
          log(logName, chalk.green('done'), chalk.white(summary));
