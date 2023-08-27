@@ -34,12 +34,14 @@ Example **package.json** scripts:
 ```
 
 The command template supports 4 variables:
-| Variable       | Description                                                  | Example                       |
-| -------------- | ------------------------------------------------------------ | ----------------------------- |
-| `{{file}}`     | Full path including filename.                                | `'build/web/libraries/d3.js'` |
-| `{{filename}}` | Relative path including filename.                            | `'libraries/d3.js'`           |
-| `{{basename}}` | Relative path including filename without the file extension. | `'libraries/d3'`              |
-| `{{path}}`     | Relative path without filename.                              | `'libraries'`                 |
+| Variable            | Description                                                  | Example                               |
+| ------------------- | ------------------------------------------------------------ | ------------------------------------- |
+| `{{file}}`          | Full path including filename.                                | `'build/web/libraries/fetch-json.js'` |
+| `{{filename}}`      | Relative path including filename.                            | `'libraries/fetch-json.js'`           |
+| `{{basename}}`      | Relative path including filename without the file extension. | `'libraries/fetch-json'`              |
+| `{{path}}`          | Relative path without filename.                              | `'libraries'`                         |
+| `{{name}}`          | File basename.                                               | `'fetch-json'`                        |
+| `{{nameCamelCase}}` | File basename converted to camel case.                       | `'fetchJson'`                         |
 
 ### 2. Command-line npx
 Example terminal command to minimize JavaScript files:
@@ -67,7 +69,7 @@ Examples:
    - `recursive-exec build/web --ext=.css 'csso {{file}} --output dist/web/{{filename}}'`<br>
    Optimize the CSS files in the **build/web** folder and save the new files to the **dist/web** folder.
 
-   - `recursive-exec build/web --ext=.js --quiet "make-dir dist/web/{{path}}"`<br>
+   - `recursive-exec build/web --ext=.js --quiet 'make-dir dist/web/{{path}}'`<br>
    Duplicate the folder structure from **build/web** over to **dist/web** (first run `npm install --save-dev make-dir-cli`).
 
    - `recursive-exec build/web --ext=.js 'uglifyjs {{file}} --output dist/web/{{basename}}.min.js'`<br>
@@ -77,7 +79,7 @@ Examples:
    List out all source files.
 
 ## C) Application Code
-Even though **recursive-exec** is primarily intended for build scripts, the package can easily be used programmatically in ESM and TypeScript projects.
+Even though **recursive-exec** is primarily intended for build scripts, the package can be used programmatically in ESM and TypeScript projects.
 
 Example:
 ``` typescript

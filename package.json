@@ -95,15 +95,16 @@
       "@typescript-eslint/parser": "~6.4",
       "add-dist-header": "~1.2",
       "assert-deep-strict-equal": "~1.1",
+      "copy-file-util": "~1.1",
       "csso-cli": "~4.0",
-      "eslint": "~8.47",
+      "eslint": "~8.48",
       "jshint": "~2.13",
       "less": "~4.2",
       "make-dir-cli": "~3.1",
       "mocha": "~10.2",
       "rimraf": "~5.0",
       "run-scripts-util": "~1.2",
-      "typescript": "~5.1",
+      "typescript": "~5.2",
       "uglify-js": "~3.17"
    }
 }

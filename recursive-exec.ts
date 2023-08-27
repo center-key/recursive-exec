@@ -20,6 +20,7 @@ export type Result = {
    path:     string,
    filename: string,
    basename: string,
+   name:     string,
    command:  string,
    };
 
@@ -45,24 +46,28 @@ const recursiveExec = {
       const getExts =    () => settings.extensions!.join('|');
       const extensions = !settings.extensions ? '' : `@(${getExts()})`;
       const files =      globSync(source + '/**/*' + extensions, { ignore: '**/node_modules/**/*', nodir: true }).sort();
+      const toCamel =    (token: string) => token.replace(/-./g, char => char[1]!.toUpperCase());  //ex: 'fetch-json' --> 'fetchJson'
       if (!settings.quiet)
          log(logName, chalk.magenta(source));
       const calcResult = (file: string) => {
-         const filename = file.substring(source.length + 1);
-         const endIndex = Math.max(source.length + 1, file.length - path.basename(file).length - 1);
-         const relPath =  file.substring(source.length + 1, endIndex);
+         const parts =    path.parse(file);
+         const filename = file.substring(source.length + 1);       //ex: 'build/lib/fetch-json.js' --> 'lib/fetch-json.js'
+         const relative = parts.dir.substring(source.length + 1);  //ex: 'build/lib/fetch-json.js' --> 'lib'
          const basename = filename.substring(0, filename.length - path.extname(filename).length);
          const interpolate = (template: string) => template
-            .replaceAll('{{basename}}', basename)
-            .replaceAll('{{file}}',     file)
-            .replaceAll('{{filename}}', filename)
-            .replaceAll('{{path}}',     relPath);
+            .replaceAll('{{file}}',          file)                  //ex: 'build/lib/fetch-json.js'
+            .replaceAll('{{filename}}',      filename)              //ex: 'lib/fetch-json.js'
+            .replaceAll('{{basename}}',      basename)              //ex: 'lib/fetch-json'
+            .replaceAll('{{path}}',          relative)              //ex: 'lib'
+            .replaceAll('{{name}}',          parts.name)            //ex: 'fetch-json'
+            .replaceAll('{{nameCamelCase}}', toCamel(parts.name));  //ex: 'fetchJson'
          return {
             folder:   source,
             file:     file,
-            path:     relPath,
+            path:     relative,
             filename: filename,
             basename: basename,
+            name:     parts.name,
             command:  interpolate(command),
             };
          };
