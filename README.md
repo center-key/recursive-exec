@@ -33,15 +33,15 @@ Example **package.json** scripts:
    },
 ```
 
-The command template supports 4 variables:
-| Variable            | Description                                                  | Example                               |
-| ------------------- | ------------------------------------------------------------ | ------------------------------------- |
-| `{{file}}`          | Full path including filename.                                | `'build/web/libraries/fetch-json.js'` |
-| `{{filename}}`      | Relative path including filename.                            | `'libraries/fetch-json.js'`           |
-| `{{basename}}`      | Relative path including filename without the file extension. | `'libraries/fetch-json'`              |
-| `{{path}}`          | Relative path without filename.                              | `'libraries'`                         |
-| `{{name}}`          | File basename.                                               | `'fetch-json'`                        |
-| `{{nameCamelCase}}` | File basename converted to camel case.                       | `'fetchJson'`                         |
+The command template supports 6 variables:
+| Template Variable   | Description                                   | Example (source: `'build/web'`)  |
+| ------------------- | --------------------------------------------- | -------------------------------- |
+| `{{file}}`          | Full path including filename.                 | `'build/web/lib/fetch-json.js'`  |
+| `{{filename}}`      | Relative path including filename.             | `'lib/fetch-json.js'`            |
+| `{{basename}}`      | Relative path including filename<br>without file extension. | `'lib/fetch-json'` |
+| `{{path}}`          | Relative path without filename.               | `'lib'`                          |
+| `{{name}}`          | Basename of file.                             | `'fetch-json'`                   |
+| `{{nameCamelCase}}` | Basename of file converted to camel case.     | `'fetchJson'`                    |
 
 ### 2. Command-line npx
 Example terminal command to minimize JavaScript files:
@@ -79,6 +79,9 @@ Examples:
 
    - `recursive-exec src 'glob {{file}}'`<br>
    List out all source files.
+
+   - `recursive-exec build/web-app --ext=.js --exclude=modules 'rollup {{file}} --file dist/web-app/{{filename}} --name {{nameCamelCase}}'`<br>
+   Use **rollup** to bundle the JavaScript for each web page but skip over the **modules** folders.
 
 ## C) Application Code
 Even though **recursive-exec** is primarily intended for build scripts, the package can be used programmatically in ESM and TypeScript projects.
