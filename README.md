@@ -7,7 +7,7 @@ _Run a command on each file in a folder and its subfolders (CLI tool designed fo
 [![npm](https://img.shields.io/npm/v/recursive-exec.svg)](https://www.npmjs.com/package/recursive-exec)
 [![Build](https://github.com/center-key/recursive-exec/workflows/build/badge.svg)](https://github.com/center-key/recursive-exec/actions/workflows/run-spec-on-push.yaml)
 
-**recursive-exec** is `find -type f -exec` for use in your project's **package.json** file.
+**recursive-exec** is the Unix `find -type f -exec` command for use in your project's **package.json** file.
 
 <img src=https://raw.githubusercontent.com/center-key/recursive-exec/main/screenshot.png
 width=800 alt=screenshot>

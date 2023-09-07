@@ -53,7 +53,7 @@ const recursiveExec = {
       const keep =       (file: string) => !excludes.find(exclude => file.includes(exclude));
       const toCamel =    (token: string) => token.replace(/-./g, char => char[1]!.toUpperCase());  //ex: 'fetch-json' --> 'fetchJson'
       if (!settings.quiet)
-         log(logName, chalk.magenta(source));
+         log(logName, chalk.magenta(source), settings.echo ? chalk.yellow('(dry run)') : '');
       const calcResult = (file: string) => {
          const parts =    path.parse(file);
          const filename = file.substring(source.length + 1);       //ex: 'build/lib/fetch-json.js' --> 'lib/fetch-json.js'
