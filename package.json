@@ -19,7 +19,10 @@
    "bin": {
       "recursive-exec": "bin/cli.js"
    },
-   "repository": "github:center-key/recursive-exec",
+   "repository": {
+      "type": "git",
+      "url": "git+https://github.com/center-key/recursive-exec.git"
+   },
    "homepage": "https://github.com/center-key/recursive-exec",
    "bugs": "https://github.com/center-key/recursive-exec/issues",
    "docs": "https://github.com/center-key/recursive-exec#readme",
@@ -90,14 +93,14 @@
    },
    "devDependencies": {
       "@types/fancy-log": "~2.0",
-      "@types/node": "~20.5",
-      "@typescript-eslint/eslint-plugin": "~6.6",
-      "@typescript-eslint/parser": "~6.6",
+      "@types/node": "~20.6",
+      "@typescript-eslint/eslint-plugin": "~6.7",
+      "@typescript-eslint/parser": "~6.7",
       "add-dist-header": "~1.3",
       "assert-deep-strict-equal": "~1.1",
       "copy-file-util": "~1.1",
       "csso-cli": "~4.0",
-      "eslint": "~8.48",
+      "eslint": "~8.50",
       "jshint": "~2.13",
       "less": "~4.2",
       "make-dir-cli": "~3.1",
