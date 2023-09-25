@@ -1,4 +1,4 @@
-//! recursive-exec v0.1.0 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
+//! recursive-exec v0.1.1 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
 
 import { globSync } from 'glob';
 import { spawnSync } from 'node:child_process';
@@ -32,7 +32,7 @@ const recursiveExec = {
         const keep = (file) => !excludes.find(exclude => file.includes(exclude));
         const toCamel = (token) => token.replace(/-./g, char => char[1].toUpperCase());
         if (!settings.quiet)
-            log(logName, chalk.magenta(source));
+            log(logName, chalk.magenta(source), settings.echo ? chalk.yellow('(dry run)') : '');
         const calcResult = (file) => {
             const parts = path.parse(file);
             const filename = file.substring(source.length + 1);
