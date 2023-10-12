@@ -63,25 +63,27 @@ Command-line flags:
 
 Examples:
    - `recursive-exec src/web --ext=.less 'lessc src/web/{{filename}} build/web/{{basename}}.css'`<br>
-   Compile all LESS files in the **src/web** folder into CSS files in the **build/web** folder.
+   Compiles all LESS files in the **src/web** folder into CSS files in the **build/web** folder.
 
    - `recursive-exec src/web --ext=.less 'lessc {{file}} build/web/{{basename}}.css'`<br>
    Identical to the previous example since `{{file}}` includes the **source** folder (`src/web`) in the path.
 
    - `recursive-exec build/web --ext=.css 'csso {{file}} --output dist/web/{{filename}}'`<br>
-   Optimize the CSS files in the **build/web** folder and save the new files to the **dist/web** folder.
+   Optimizes the CSS files in the **build/web** folder and save the new files to the **dist/web** folder.
 
    - `recursive-exec build/web --ext=.js --quiet 'make-dir dist/web/{{path}}'`<br>
-   Duplicate the folder structure from **build/web** over to **dist/web** (first run `npm install --save-dev make-dir-cli`).
+   Duplicates the folder structure from **build/web** over to **dist/web** (first run `npm install --save-dev make-dir-cli`).
 
    - `recursive-exec build/web --ext=.js 'uglifyjs {{file}} --output dist/web/{{basename}}.min.js'`<br>
-   Minimize the JavaScript files in the **build/web** folder and save the new files to the **dist/web** folder with the **.min.js** file extension.
+   Minimizes the JavaScript files in the **build/web** folder and saves the new files to the **dist/web** folder with the **.min.js** file extension.
 
    - `recursive-exec src 'glob {{file}}'`<br>
-   List out all source files.
+   Lists out all source files.
 
    - `recursive-exec build/web-app --ext=.js --exclude=modules 'rollup {{file}} --file dist/web-app/{{filename}} --name {{nameCamelCase}}'`<br>
-   Use **rollup** to bundle the JavaScript for each web page but skip over the **modules** folders.
+   Uses **rollup** to bundle the JavaScript for each web page but skip over the **modules** folders.
+
+_**Note:** Single quotes in commands are normalized so they work cross-platform and avoid the errors often encountered on Microsoft Windows._
 
 ## C) Application Code
 Even though **recursive-exec** is primarily intended for build scripts, the package can be used programmatically in ESM and TypeScript projects.
