@@ -1,4 +1,4 @@
-//! recursive-exec v1.0.0 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
+//! recursive-exec v1.0.1 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
 
 import { globSync } from 'glob';
 import { spawnSync } from 'node:child_process';
@@ -21,14 +21,14 @@ const recursiveExec = {
                     !command ? 'Command template missing.' :
                         null;
         if (errorMessage)
-            throw Error('[recursive-exec] ' + errorMessage);
+            throw new Error('[recursive-exec] ' + errorMessage);
         const startTime = Date.now();
         const source = slash(path.normalize(folder)).replace(/\/$/, '');
         const logName = chalk.gray('recursive-exec');
         const getExts = () => settings.extensions.join('|');
         const extensions = !settings.extensions ? '' : `@(${getExts()})`;
         const files = globSync(source + '/**/*' + extensions, { ignore: '**/node_modules/**/*', nodir: true });
-        const excludes = settings?.excludes || [];
+        const excludes = settings.excludes || [];
         const keep = (file) => !excludes.find(exclude => file.includes(exclude));
         const toCamel = (token) => token.replace(/-./g, char => char[1].toUpperCase());
         if (!settings.quiet)
@@ -64,7 +64,7 @@ const recursiveExec = {
                 log(logName, chalk.blue.bold('command:'), chalk.cyanBright(result.command));
             const task = spawnSync(result.command, { shell: true, stdio: 'inherit' });
             if (task.status !== 0)
-                throw Error(`[recursive-exec] Status: ${task.status}\nCommand: ${result.command}`);
+                throw new Error(`[recursive-exec] Status: ${task.status}\nCommand: ${result.command}`);
         };
         results.forEach(settings.echo ? previewCommand : execCommand);
         const summary = `(files: ${results.length}, ${Date.now() - startTime}ms)`;
