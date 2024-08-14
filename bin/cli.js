@@ -37,7 +37,7 @@ const error =
    cli.paramsCount > 2 ? 'Extraneous parameter: ' + cli.params[2] :
    null;
 if (error)
-   throw Error('[recursive-exec] ' + error);
+   throw new Error('[recursive-exec] ' + error);
 const options = {
    echo:       cli.flagOn.echo,
    excludes:   cli.flagMap.exclude?.split(',') ?? null,
