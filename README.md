@@ -96,7 +96,7 @@ const results = recursiveExec.find('src/web', 'ls -o {{file}}', { quite: true })
 console.log('Number of files:', results.length);
 ```
 
-See the **TypeScript Declarations** at the top of [recursive-exec.ts](recursive-exec.ts) for documentation.
+See the **TypeScript Declarations** at the top of [recursive-exec.ts](src/recursive-exec.ts) for documentation.
 
 <br>
 
