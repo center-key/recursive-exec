@@ -31,10 +31,10 @@ const command =    cli.params[1];
 
 // Recursive Exec
 const error =
-   cli.invalidFlag ?     cli.invalidFlagMsg :
-   !folder ?             'Missing source folder.' :
-   !command ?            'Missing command to execute.' :
-   cli.paramsCount > 2 ? 'Extraneous parameter: ' + cli.params[2] :
+   cli.invalidFlag ?    cli.invalidFlagMsg :
+   !folder ?            'Missing source folder.' :
+   !command ?           'Missing command to execute.' :
+   cli.paramCount > 2 ? 'Extraneous parameter: ' + cli.params[2] :
    null;
 if (error)
    throw new Error('[recursive-exec] ' + error);

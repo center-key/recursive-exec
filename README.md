@@ -92,7 +92,8 @@ Example:
 ``` typescript
 import { recursiveExec } from 'recursive-exec';
 
-const results = recursiveExec.find('src/web', 'ls -o {{file}}', { quite: true });
+const options = { quite: true };
+const results = recursiveExec.find('src/web', 'ls -o {{file}}', options);
 console.log('Number of files:', results.length);
 ```
 
