@@ -94,7 +94,7 @@ import { recursiveExec } from 'recursive-exec';
 
 const options = { quiet: true };
 const results = recursiveExec.find('src/web', 'ls -o {{file}}', options);
-console.log('Number of files:', results.length);
+console.info('Number of files:', results.length);
 ```
 
 See the **TypeScript Declarations** at the top of [recursive-exec.ts](src/recursive-exec.ts) for documentation.
