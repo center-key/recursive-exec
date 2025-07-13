@@ -43,15 +43,16 @@ const recursiveExec = {
          null;
       if (errorMessage)
          throw new Error('[recursive-exec] ' + errorMessage);
-      const startTime =  Date.now();
-      const source =     slash(path.normalize(folder)).replace(/\/$/, '');
-      const logName =    chalk.gray('recursive-exec');
-      const getExts =    () => settings.extensions!.join('|');
-      const extensions = !settings.extensions ? '' : `@(${getExts()})`;
-      const files =      globSync(source + '/**/*' + extensions, { ignore: '**/node_modules/**/*', nodir: true });
-      const excludes =   settings.excludes || [];
-      const keep =       (file: string) => !excludes.find(exclude => file.includes(exclude));
-      const toCamel =    (token: string) => token.replace(/-./g, char => char[1]!.toUpperCase());  //ex: 'fetch-json' --> 'fetchJson'
+      const startTime =   Date.now();
+      const source =      slash(path.normalize(folder)).replace(/\/$/, '');
+      const logName =     chalk.gray('recursive-exec');
+      const getExts =     () => settings.extensions!.join('|');
+      const extensions =  !settings.extensions ? '' : `@(${getExts()})`;
+      const globOptions = { ignore: '**/node_modules/**/*', nodir: true };
+      const files =       globSync(source + '/**/*' + extensions, globOptions).map(slash);
+      const excludes =    settings.excludes || [];
+      const keep =        (file: string) => !excludes.find(exclude => file.includes(exclude));
+      const toCamel =     (token: string) => token.replace(/-./g, char => char[1]!.toUpperCase());  //ex: 'fetch-json' --> 'fetchJson'
       if (!settings.quiet)
          log(logName, chalk.magenta(source), settings.echo ? chalk.yellow('(dry run)') : '');
       const calcResult = (file: string) => {
@@ -76,7 +77,7 @@ const recursiveExec = {
             command:  interpolate(command),
             };
          };
-      const results = files.map(slash).filter(keep).sort().map(calcResult);
+      const results = files.filter(keep).sort().map(calcResult);
       const previewCommand = (result: Result) => {
          log(logName, chalk.blue.bold('preview:'), chalk.yellow(result.command));
          };
