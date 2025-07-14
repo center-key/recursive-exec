@@ -125,6 +125,8 @@ describe('Executing the CLI', () => {
          'subfolder/mock-file2.css',
          ];
       assertDeepStrictEqual(actual, expected);
+      fixEolGitDiff('spec/fixtures/target/css/mock-file1.css');
+      fixEolGitDiff('spec/fixtures/target/css/subfolder/mock-file2.css');
       });
 
    it('to optimize CSS files preserves the source folder structure', () => {
@@ -137,8 +139,6 @@ describe('Executing the CLI', () => {
          'subfolder/mock-file2.min.css',
          ];
       assertDeepStrictEqual(actual, expected);
-      fixEolGitDiff('spec/fixtures/target/css-min/mock-file1.min.css');
-      fixEolGitDiff('spec/fixtures/target/css-min/subfolder/mock-file2.min.css');
       });
 
    it('to minimize JS files preserves the source folder structure', () => {
