@@ -1,4 +1,4 @@
-//! recursive-exec v1.0.3 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
+//! recursive-exec v1.0.4 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
 
 import { globSync } from 'glob';
 import { spawnSync } from 'node:child_process';
@@ -27,7 +27,8 @@ const recursiveExec = {
         const logName = chalk.gray('recursive-exec');
         const getExts = () => settings.extensions.join('|');
         const extensions = !settings.extensions ? '' : `@(${getExts()})`;
-        const files = globSync(source + '/**/*' + extensions, { ignore: '**/node_modules/**/*', nodir: true });
+        const globOptions = { ignore: '**/node_modules/**/*', nodir: true };
+        const files = globSync(source + '/**/*' + extensions, globOptions).map(slash);
         const excludes = settings.excludes || [];
         const keep = (file) => !excludes.find(exclude => file.includes(exclude));
         const toCamel = (token) => token.replace(/-./g, char => char[1].toUpperCase());
@@ -55,7 +56,7 @@ const recursiveExec = {
                 command: interpolate(command),
             };
         };
-        const results = files.map(slash).filter(keep).sort().map(calcResult);
+        const results = files.filter(keep).sort().map(calcResult);
         const previewCommand = (result) => {
             log(logName, chalk.blue.bold('preview:'), chalk.yellow(result.command));
         };
