@@ -2,7 +2,7 @@
 // Mocha Specification Suite
 
 // Imports
-import { assertDeepStrictEqual } from 'assert-deep-strict-equal';
+import { assertDeepStrictEqual, fixEolGitDiff } from 'assert-deep-strict-equal';
 import { cliArgvUtil } from 'cli-argv-util';
 import assert from 'assert';
 import fs     from 'fs';
@@ -137,6 +137,8 @@ describe('Executing the CLI', () => {
          'subfolder/mock-file2.min.css',
          ];
       assertDeepStrictEqual(actual, expected);
+      fixEolGitDiff('spec/fixtures/target/css-min/mock-file1.min.css');
+      fixEolGitDiff('spec/fixtures/target/css-min/subfolder/mock-file2.min.css');
       });
 
    it('to minimize JS files preserves the source folder structure', () => {
