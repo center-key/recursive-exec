@@ -10,6 +10,7 @@ import fs     from 'fs';
 // Setup
 import { recursiveExec } from '../dist/recursive-exec.js';
 const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
+const run = (posix) => cliArgvUtil.run(pkg, posix);
 
 ////////////////////////////////////////////////////////////////////////////////
 describe('The "dist" folder', () => {
@@ -114,7 +115,6 @@ describe('Correct error is thrown', () => {
 
 ////////////////////////////////////////////////////////////////////////////////
 describe('Executing the CLI', () => {
-   const run = (posix) => cliArgvUtil.run(pkg, posix);
 
    it('to compile LESS files to CSS preserves the source folder structure', () => {
       run("recursive-exec spec/fixtures --ext=.less 'lessc {{file}} spec/target/css/{{basename}}.css'");
@@ -145,6 +145,18 @@ describe('Executing the CLI', () => {
       run("recursive-exec spec/fixtures --ext=.js --quiet 'make-dir spec/target/js/{{path}}'");
       run("recursive-exec spec/fixtures --ext=.js 'uglifyjs {{file}} --output spec/target/js/{{basename}}.min.js'");
       const actual = cliArgvUtil.readFolder('spec/target/js');
+      const expected = [
+         'mock-file1.min.js',
+         'subfolder',
+         'subfolder/mock-file2.min.js',
+         ];
+      assertDeepStrictEqual(actual, expected);
+      });
+
+   it('with a package.json command macro for the previous specification produces the same result', () => {
+      run("recursive-exec spec/fixtures --ext=.js --quiet {{command:make-dir}}");
+      run("recursive-exec spec/fixtures --ext=.js {{command:uglifyjs}}");
+      const actual = cliArgvUtil.readFolder('spec/target/js-macro');
       const expected = [
          'mock-file1.min.js',
          'subfolder',

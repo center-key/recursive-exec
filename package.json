@@ -42,6 +42,13 @@
       "node": true,
       "mocha": true
    },
+   "recursiveExecConfig": {
+      "commands": {
+         "make-dir": "make-dir spec/target/js-macro/{{path}}",
+         "uglifyjs": "uglifyjs {{file}} --output spec/target/js-macro/{{basename}}.min.js"
+
+      }
+   },
    "runScriptsConfig": {
       "clean": [
          "rimraf build dist spec/target"

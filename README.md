@@ -43,7 +43,23 @@ The command template supports 6 variables:
 | `{{name}}`          | Basename of file.                             | `'fetch-json'`                   |
 | `{{nameCamelCase}}` | Basename of file converted to camel case.     | `'fetchJson'`                    |
 
-### 2. Command-line npx
+
+### 2. Command macros
+For reusability and improved readability, commands should be defined as macros in your project's **package.json** file.
+
+Example **package.json** scripts:
+```json
+   "recursiveExecConfig": {
+      "commands": {
+         "make-min-file": "uglifyjs {{file}} --output dist/web/{{basename}}.min.js"
+      }
+   },
+   "scripts": {
+      "minimize-js": "recursive-exec build/web --ext=.js {{command:make-min-file}}"
+   },
+```
+
+### 3. Command-line npx
 Example terminal command to minimize JavaScript files:
 ```shell
 $ npm install --save-dev recursive-exec
@@ -51,7 +67,7 @@ $ npx recursive-exec build/web --ext=.js "uglifyjs {{file}} --output dist/web/{{
 ```
 You can also install **recursive-exec** globally (`--global`) and then run it anywhere directly from the terminal.
 
-### 3. CLI flags
+### 4. CLI flags
 Command-line flags:
 | Flag         | Description                                                | Value      |
 | ------------ | ---------------------------------------------------------- | ---------- |
@@ -61,9 +77,13 @@ Command-line flags:
 | `--note`     | Place to add a comment only for humans.                    | **string** |
 | `--quiet`    | Suppress informational messages.                           | N/A        |
 
+### 5. CLI examples
 Examples:
    - `recursive-exec src/web --ext=.less 'lessc src/web/{{filename}} build/web/{{basename}}.css'`<br>
    Compiles all LESS files in the **src/web** folder into CSS files in the **build/web** folder.
+
+   - `recursive-exec src/web --ext=.less {{command:compile-less}}`<br>
+   Identical to the previous example if a command macro named `compile-less` is defined correctly in your project's **package.json** file.
 
    - `recursive-exec src/web --ext=.less 'lessc {{file}} build/web/{{basename}}.css'`<br>
    Identical to the previous example since `{{file}}` includes the **source** folder (`src/web`) in the path.
