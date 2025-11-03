@@ -49,43 +49,43 @@ describe('Library module', () => {
 describe('Calling recursiveExec.find()', () => {
 
    it('for HTML and LESS files returns an array listing the correct files', () => {
-      const folder =  'spec/fixtures/source';
+      const folder =  'spec/fixtures';
       const command = 'glob {{file}}';
       const actual = recursiveExec.find(folder, command, { extensions: ['.html', '.less'] });
       const expected = [
          {
             basename: 'mock-file1',
-            command:  'glob spec/fixtures/source/mock-file1.html',
-            file:     'spec/fixtures/source/mock-file1.html',
+            command:  'glob spec/fixtures/mock-file1.html',
+            file:     'spec/fixtures/mock-file1.html',
             filename: 'mock-file1.html',
-            folder:   'spec/fixtures/source',
+            folder:   'spec/fixtures',
             name:     'mock-file1',
             path:     '',
             },
          {
             basename: 'mock-file1',
-            command:  'glob spec/fixtures/source/mock-file1.less',
-            file:     'spec/fixtures/source/mock-file1.less',
+            command:  'glob spec/fixtures/mock-file1.less',
+            file:     'spec/fixtures/mock-file1.less',
             filename: 'mock-file1.less',
-            folder:   'spec/fixtures/source',
+            folder:   'spec/fixtures',
             name:     'mock-file1',
             path:     '',
             },
          {
             basename: 'subfolder/mock-file2',
-            command:  'glob spec/fixtures/source/subfolder/mock-file2.html',
-            file:     'spec/fixtures/source/subfolder/mock-file2.html',
+            command:  'glob spec/fixtures/subfolder/mock-file2.html',
+            file:     'spec/fixtures/subfolder/mock-file2.html',
             filename: 'subfolder/mock-file2.html',
-            folder:   'spec/fixtures/source',
+            folder:   'spec/fixtures',
             name:     'mock-file2',
             path:     'subfolder',
             },
          {
             basename: 'subfolder/mock-file2',
-            command:  'glob spec/fixtures/source/subfolder/mock-file2.less',
-            file:     'spec/fixtures/source/subfolder/mock-file2.less',
+            command:  'glob spec/fixtures/subfolder/mock-file2.less',
+            file:     'spec/fixtures/subfolder/mock-file2.less',
             filename: 'subfolder/mock-file2.less',
-            folder:   'spec/fixtures/source',
+            folder:   'spec/fixtures',
             name:     'mock-file2',
             path:     'subfolder',
             },
@@ -117,22 +117,22 @@ describe('Executing the CLI', () => {
    const run = (posix) => cliArgvUtil.run(pkg, posix);
 
    it('to compile LESS files to CSS preserves the source folder structure', () => {
-      run("recursive-exec spec/fixtures/source --ext=.less 'lessc {{file}} spec/fixtures/target/css/{{basename}}.css'");
-      const actual = cliArgvUtil.readFolder('spec/fixtures/target/css');
+      run("recursive-exec spec/fixtures --ext=.less 'lessc {{file}} spec/target/css/{{basename}}.css'");
+      const actual = cliArgvUtil.readFolder('spec/target/css');
       const expected = [
          'mock-file1.css',
          'subfolder',
          'subfolder/mock-file2.css',
          ];
       assertDeepStrictEqual(actual, expected);
-      fixEolGitDiff('spec/fixtures/target/css/mock-file1.css');
-      fixEolGitDiff('spec/fixtures/target/css/subfolder/mock-file2.css');
+      fixEolGitDiff('spec/target/css/mock-file1.css');
+      fixEolGitDiff('spec/target/css/subfolder/mock-file2.css');
       });
 
    it('to optimize CSS files preserves the source folder structure', () => {
-      run("recursive-exec spec/fixtures/source --ext=.js 'make-dir spec/fixtures/target/css-min/{{path}}' --quiet");
-      run("recursive-exec spec/fixtures/target/css 'csso {{file}} --output spec/fixtures/target/css-min/{{basename}}.min.css'");
-      const actual = cliArgvUtil.readFolder('spec/fixtures/target/css-min');
+      run("recursive-exec spec/fixtures --ext=.js 'make-dir spec/target/css-min/{{path}}' --quiet");
+      run("recursive-exec spec/target/css 'csso {{file}} --output spec/target/css-min/{{basename}}.min.css'");
+      const actual = cliArgvUtil.readFolder('spec/target/css-min');
       const expected = [
          'mock-file1.min.css',
          'subfolder',
@@ -142,9 +142,9 @@ describe('Executing the CLI', () => {
       });
 
    it('to minimize JS files preserves the source folder structure', () => {
-      run("recursive-exec spec/fixtures/source --ext=.js --quiet 'make-dir spec/fixtures/target/js/{{path}}'");
-      run("recursive-exec spec/fixtures/source --ext=.js 'uglifyjs {{file}} --output spec/fixtures/target/js/{{basename}}.min.js'");
-      const actual = cliArgvUtil.readFolder('spec/fixtures/target/js');
+      run("recursive-exec spec/fixtures --ext=.js --quiet 'make-dir spec/target/js/{{path}}'");
+      run("recursive-exec spec/fixtures --ext=.js 'uglifyjs {{file}} --output spec/target/js/{{basename}}.min.js'");
+      const actual = cliArgvUtil.readFolder('spec/target/js');
       const expected = [
          'mock-file1.min.js',
          'subfolder',
@@ -154,10 +154,10 @@ describe('Executing the CLI', () => {
       });
 
    it('to rename copies of files with camel case names preserves the source folder structure', () => {
-      const template = 'copy-file {{file}} spec/fixtures/target/html/{{path}}/{{name}}.{{nameCamelCase}}.html';
-      run(`recursive-exec spec/fixtures/source --ext=.html --echo '${template}'`);
-      run(`recursive-exec spec/fixtures/source --ext=.html '${template}'`);
-      const actual = cliArgvUtil.readFolder('spec/fixtures/target/html');
+      const template = 'copy-file {{file}} spec/target/html/{{path}}/{{name}}.{{nameCamelCase}}.html';
+      run(`recursive-exec spec/fixtures --ext=.html --echo '${template}'`);
+      run(`recursive-exec spec/fixtures --ext=.html '${template}'`);
+      const actual = cliArgvUtil.readFolder('spec/target/html');
       const expected = [
          'mock-file1.mockFile1.html',
          'subfolder',
@@ -167,9 +167,9 @@ describe('Executing the CLI', () => {
       });
 
    it('with the --exclude flag skips over the excluded files', () => {
-      const template = 'copy-file {{file}} spec/fixtures/target/exclude/{{filename}}';
-      run(`recursive-exec spec/fixtures/source --exclude=file1,html '${template}'`);
-      const actual = cliArgvUtil.readFolder('spec/fixtures/target/exclude');
+      const template = 'copy-file {{file}} spec/target/exclude/{{filename}}';
+      run(`recursive-exec spec/fixtures --exclude=file1,html '${template}'`);
+      const actual = cliArgvUtil.readFolder('spec/target/exclude');
       const expected = [
          'subfolder',
          'subfolder/mock-file2.js',

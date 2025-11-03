@@ -15,7 +15,7 @@
 //    $ cd recursive-exec
 //    $ npm install
 //    $ npm test
-//    $ node bin/cli.js spec/fixtures/source --ext=.js,.css 'npx glob {{file}}'
+//    $ node bin/cli.js spec/fixtures --ext=.js,.css 'npx glob {{file}}'
 
 // Imports
 import { cliArgvUtil } from 'cli-argv-util';
@@ -23,7 +23,7 @@ import { cliArgvUtil } from 'cli-argv-util';
 // Modules
 import { recursiveExec } from '../dist/recursive-exec.js';
 
-// Parameters and flags
+// Parameters and Flags
 const validFlags = ['echo', 'exclude', 'ext', 'note', 'quiet'];
 const cli =        cliArgvUtil.parse(validFlags);
 const folder =     cli.params[0];
