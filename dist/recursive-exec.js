@@ -1,4 +1,4 @@
-//! recursive-exec v1.0.4 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
+//! recursive-exec v1.1.0 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
 
 import { globSync } from 'glob';
 import { spawnSync } from 'node:child_process';

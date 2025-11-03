@@ -28,9 +28,9 @@ Parameters:
 
 Example **package.json** scripts:
 ```json
-   "scripts": {
-      "minimize-js": "recursive-exec build/web --ext=.js 'uglifyjs {{file}} --output dist/web/{{basename}}.min.js'"
-   },
+"scripts": {
+   "minimize-js": "recursive-exec build/web --ext=.js 'uglifyjs {{file}} --output dist/web/{{basename}}.min.js'"
+},
 ```
 
 The command template supports 6 variables:
@@ -45,18 +45,18 @@ The command template supports 6 variables:
 
 
 ### 2. Command macros
-For reusability and improved readability, commands should be defined as macros in your project's **package.json** file.
+For reusability and readability, best practice is to define commands as macros in your project's **package.json** file.
 
 Example **package.json** scripts:
 ```json
-   "recursiveExecConfig": {
-      "commands": {
-         "make-min-file": "uglifyjs {{file}} --output dist/web/{{basename}}.min.js"
-      }
-   },
-   "scripts": {
-      "minimize-js": "recursive-exec build/web --ext=.js {{command:make-min-file}}"
-   },
+"recursiveExecConfig": {
+   "commands": {
+      "make-min-file": "uglifyjs {{file}} --output dist/web/{{basename}}.min.js"
+   }
+},
+"scripts": {
+   "minimize-js": "recursive-exec build/web --ext=.js {{command:make-min-file}}"
+},
 ```
 
 ### 3. Command-line npx
