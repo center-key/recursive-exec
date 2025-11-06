@@ -28,21 +28,26 @@ export type Result = {
 
 const recursiveExec = {
 
+   assert(ok: unknown, message: string | null) {
+      if (!ok)
+         throw new Error(`[recursive-exec] ${message}`);
+      },
+
    find(folder: string, command: string, options?: Partial<Settings>): Result[] {
-      const defaults = {
+      const defaults: Settings = {
+         echo:       false,
          excludes:   null,
          extensions: null,
          quiet:      false,
          };
       const settings = { ...defaults, ...options };
-      const errorMessage =
+      const error =
          !folder ?                            'Must specify the folder path.' :
          !fs.existsSync(folder) ?             'Folder does not exist: ' + folder :
          !fs.statSync(folder).isDirectory() ? 'Folder is not a folder: ' + folder :
          !command ?                           'Command template missing.' :
          null;
-      if (errorMessage)
-         throw new Error('[recursive-exec] ' + errorMessage);
+      recursiveExec.assert(!error, error);
       const startTime =   Date.now();
       const source =      slash(path.normalize(folder)).replace(/\/$/, '');
       const logName =     chalk.gray('recursive-exec');
@@ -85,8 +90,8 @@ const recursiveExec = {
          if (!settings.quiet)
             log(logName, chalk.blue.bold('command:'), chalk.cyanBright(result.command));
          const task = spawnSync(result.command, { shell: true, stdio: 'inherit' });
-         if (task.status !== 0)
-            throw new Error(`[recursive-exec] Status: ${task.status}\nCommand: ${result.command}`);
+         recursiveExec.assert(task.status === 0,
+            `Status: ${task.status}, Command: ${result.command}`);
          };
       results.forEach(settings.echo ? previewCommand : execCommand);
       const summary = `(files: ${results.length}, ${Date.now() - startTime}ms)`;

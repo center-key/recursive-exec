@@ -48,8 +48,7 @@ const error =
    cli.paramCount > 2 ?       'Extraneous parameter: ' + cli.params[2] :
    macroName && !macroValue ? 'Command macro not defined: ' + macroName :
    null;
-if (error)
-   throw new Error('[recursive-exec] ' + error);
+recursiveExec.assert(!error, error);
 const options = {
    echo:       cli.flagOn.echo,
    excludes:   cli.flagMap.exclude?.split(',') ?? null,

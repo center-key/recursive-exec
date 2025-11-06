@@ -35,11 +35,12 @@ describe('Library module', () => {
       assertDeepStrictEqual(actual, expected);
       });
 
-   it('has a function named find()', () => {
+   it('has functions named assert() and find()', () => {
       const module = recursiveExec;
       const actual = Object.keys(module).sort().map(key => [key, typeof module[key]]);
       const expected = [
-         ['find', 'function'],
+         ['assert', 'function'],
+         ['find',   'function'],
          ];
       assertDeepStrictEqual(actual, expected);
       });

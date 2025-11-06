@@ -77,8 +77,7 @@ Command-line flags:
 | `--note`     | Place to add a comment only for humans.                    | **string** |
 | `--quiet`    | Suppress informational messages.                           | N/A        |
 
-### 5. CLI examples
-Examples:
+### 5. Examples
    - `recursive-exec src/web --ext=.less 'lessc src/web/{{filename}} build/web/{{basename}}.css'`<br>
    Compiles all LESS files in the **src/web** folder into CSS files in the **build/web** folder.
 
