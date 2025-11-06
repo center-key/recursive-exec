@@ -40,6 +40,7 @@ describe('Library module', () => {
       const actual = Object.keys(module).sort().map(key => [key, typeof module[key]]);
       const expected = [
          ['assert', 'function'],
+         ['cli',    'function'],
          ['find',   'function'],
          ];
       assertDeepStrictEqual(actual, expected);
