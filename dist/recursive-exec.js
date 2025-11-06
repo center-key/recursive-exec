@@ -1,5 +1,6 @@
-//! recursive-exec v1.1.0 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
+//! recursive-exec v1.1.1 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
 
+import { cliArgvUtil } from 'cli-argv-util';
 import { globSync } from 'glob';
 import { spawnSync } from 'node:child_process';
 import chalk from 'chalk';
@@ -8,20 +9,47 @@ import log from 'fancy-log';
 import path from 'path';
 import slash from 'slash';
 const recursiveExec = {
+    assert(ok, message) {
+        if (!ok)
+            throw new Error(`[recursive-exec] ${message}`);
+    },
+    cli() {
+        const validFlags = ['echo', 'exclude', 'ext', 'note', 'quiet'];
+        const cli = cliArgvUtil.parse(validFlags);
+        const folder = cli.params[0];
+        const command = cli.params[1];
+        const macroName = command?.match(/^{{command:(.*)}}$/)?.[1];
+        const readPkg = () => JSON.parse(fs.readFileSync('package.json', 'utf-8'));
+        const macroValue = macroName && readPkg().recursiveExecConfig?.commands?.[macroName];
+        const error = cli.invalidFlag ? cli.invalidFlagMsg :
+            !folder ? 'Missing source folder.' :
+                !command ? 'Missing command to execute.' :
+                    cli.paramCount > 2 ? 'Extraneous parameter: ' + cli.params[2] :
+                        macroName && !macroValue ? 'Command macro not defined: ' + macroName :
+                            null;
+        recursiveExec.assert(!error, error);
+        const options = {
+            echo: cli.flagOn.echo,
+            excludes: cli.flagMap.exclude?.split(',') ?? null,
+            quiet: cli.flagOn.quiet,
+            extensions: cli.flagMap.ext?.split(',') ?? null,
+        };
+        recursiveExec.find(folder, macroValue ?? command, options);
+    },
     find(folder, command, options) {
         const defaults = {
+            echo: false,
             excludes: null,
             extensions: null,
             quiet: false,
         };
         const settings = { ...defaults, ...options };
-        const errorMessage = !folder ? 'Must specify the folder path.' :
+        const error = !folder ? 'Must specify the folder path.' :
             !fs.existsSync(folder) ? 'Folder does not exist: ' + folder :
                 !fs.statSync(folder).isDirectory() ? 'Folder is not a folder: ' + folder :
                     !command ? 'Command template missing.' :
                         null;
-        if (errorMessage)
-            throw new Error('[recursive-exec] ' + errorMessage);
+        recursiveExec.assert(!error, error);
         const startTime = Date.now();
         const source = slash(path.normalize(folder)).replace(/\/$/, '');
         const logName = chalk.gray('recursive-exec');
@@ -64,8 +92,7 @@ const recursiveExec = {
             if (!settings.quiet)
                 log(logName, chalk.blue.bold('command:'), chalk.cyanBright(result.command));
             const task = spawnSync(result.command, { shell: true, stdio: 'inherit' });
-            if (task.status !== 0)
-                throw new Error(`[recursive-exec] Status: ${task.status}\nCommand: ${result.command}`);
+            recursiveExec.assert(task.status === 0, `Status: ${task.status}, Command: ${result.command}`);
         };
         results.forEach(settings.echo ? previewCommand : execCommand);
         const summary = `(files: ${results.length}, ${Date.now() - startTime}ms)`;
