@@ -19,12 +19,16 @@ $ npm install --save-dev recursive-exec
 ```
 
 ## B) Usage
-### 1. npm package.json scripts
-Run `recursive-exec` from the `"scripts"` section of your **package.json** file.
-
+### 1. Synopsis
+```
+recursive-exec [PATH] [COMMAND]
+```
 Parameters:
 * The **first** parameter is the *source* folder.
 * The **second** parameter is the *command template* string.
+
+### 2. npm package.json scripts
+Run `recursive-exec` from the `"scripts"` section of your **package.json** file.
 
 Example **package.json** scripts:
 ```json
@@ -43,8 +47,7 @@ The command template supports 6 variables:
 | `{{name}}`          | Basename of file.                             | `'fetch-json'`                   |
 | `{{nameCamelCase}}` | Basename of file converted to camel case.     | `'fetchJson'`                    |
 
-
-### 2. Command macros
+### 3. Command macros
 For reusability and readability, best practice is to define commands as macros in your project's **package.json** file.
 
 Example **package.json** scripts:
@@ -59,7 +62,7 @@ Example **package.json** scripts:
 },
 ```
 
-### 3. Command-line npx
+### 4. Command-line npx
 Example terminal command to minimize JavaScript files:
 ```shell
 $ npm install --save-dev recursive-exec
@@ -67,7 +70,7 @@ $ npx recursive-exec build/web --ext=.js "uglifyjs {{file}} --output dist/web/{{
 ```
 You can also install **recursive-exec** globally (`--global`) and then run it anywhere directly from the terminal.
 
-### 4. CLI flags
+### 5. CLI flags
 Command-line flags:
 | Flag         | Description                                                | Value      |
 | ------------ | ---------------------------------------------------------- | ---------- |
@@ -77,7 +80,7 @@ Command-line flags:
 | `--note`     | Place to add a comment only for humans.                    | **string** |
 | `--quiet`    | Suppress informational messages.                           | N/A        |
 
-### 5. Examples
+### 6. Examples
    - `recursive-exec src/web --ext=.less 'lessc src/web/{{filename}} build/web/{{basename}}.css'`<br>
    Compiles all LESS files in the **src/web** folder into CSS files in the **build/web** folder.
 
