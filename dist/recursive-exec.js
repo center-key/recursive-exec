@@ -1,4 +1,4 @@
-//! recursive-exec v1.1.2 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
+//! recursive-exec v1.1.3 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
 
 import { cliArgvUtil } from 'cli-argv-util';
 import { globSync } from 'glob';
