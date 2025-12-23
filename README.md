@@ -105,7 +105,8 @@ Command-line flags:
    - `recursive-exec build/web-app --ext=.js --exclude=modules 'rollup {{file}} --file dist/web-app/{{filename}} --name {{nameCamelCase}}'`<br>
    Uses **rollup** to bundle the JavaScript for each web page but skip over the **modules** folders.
 
-_**Note:** Single quotes in commands are normalized so they work cross-platform and avoid the errors often encountered on Microsoft Windows._
+> [!NOTE]
+> _Single quotes in commands are normalized so they work cross-platform and avoid the errors often encountered on Microsoft Windows._
 
 ## C) Application Code
 Even though **recursive-exec** is primarily intended for build scripts, the package can be used programmatically in ESM and TypeScript projects.

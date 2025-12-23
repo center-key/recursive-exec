@@ -1,4 +1,4 @@
-//! recursive-exec v1.1.3 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
+//! recursive-exec v1.1.4 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
 
 import { cliArgvUtil } from 'cli-argv-util';
 import { globSync } from 'glob';
@@ -52,7 +52,8 @@ const recursiveExec = {
         recursiveExec.assert(!error, error);
         const startTime = Date.now();
         const source = slash(path.normalize(folder)).replace(/\/$/, '');
-        const logName = chalk.gray('recursive-exec');
+        const name = chalk.gray('recursive-exec');
+        const dryRunNote = settings.echo ? chalk.yellow('[dry run]') : '';
         const getExts = () => settings.extensions.join('|');
         const extensions = !settings.extensions ? '' : `@(${getExts()})`;
         const globOptions = { ignore: '**/node_modules/**/*', nodir: true };
@@ -61,7 +62,7 @@ const recursiveExec = {
         const keep = (file) => !excludes.find(exclude => file.includes(exclude));
         const toCamel = (token) => token.replace(/-./g, char => char[1].toUpperCase());
         if (!settings.quiet)
-            log(logName, chalk.magenta(source), settings.echo ? chalk.yellow('(dry run)') : '');
+            log(name, chalk.magenta(source), dryRunNote);
         const calcResult = (file) => {
             const parts = path.parse(file);
             const filename = file.substring(source.length + 1);
@@ -85,19 +86,21 @@ const recursiveExec = {
             };
         };
         const results = files.filter(keep).sort().map(calcResult);
-        const previewCommand = (result) => {
-            log(logName, chalk.blue.bold('preview:'), chalk.yellow(result.command));
+        const execCommand = (result, index) => {
+            if (!settings.quiet || settings.echo)
+                log(name, chalk.white(index + 1), chalk.cyanBright(result.command), dryRunNote);
+            const exec = () => {
+                const task = spawnSync(result.command, { shell: true, stdio: 'inherit' });
+                const errorMsg = () => `Status: ${task.status}, Command: ${result.command}`;
+                recursiveExec.assert(task.status === 0, errorMsg());
+            };
+            if (!settings.echo)
+                exec();
         };
-        const execCommand = (result) => {
-            if (!settings.quiet)
-                log(logName, chalk.blue.bold('command:'), chalk.cyanBright(result.command));
-            const task = spawnSync(result.command, { shell: true, stdio: 'inherit' });
-            recursiveExec.assert(task.status === 0, `Status: ${task.status}, Command: ${result.command}`);
-        };
-        results.forEach(settings.echo ? previewCommand : execCommand);
+        results.forEach(execCommand);
         const summary = `(files: ${results.length}, ${Date.now() - startTime}ms)`;
         if (!settings.quiet)
-            log(logName, chalk.green('done'), chalk.white(summary));
+            log(name, chalk.green('done'), chalk.white(summary));
         return results;
     },
 };
