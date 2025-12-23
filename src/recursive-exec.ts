@@ -105,7 +105,7 @@ const recursiveExec = {
       const keep =        (file: string) => !excludes.find(exclude => file.includes(exclude));
       const toCamel =     (token: string) => token.replace(/-./g, char => char[1]!.toUpperCase());  //ex: 'fetch-json' --> 'fetchJson'
       if (!settings.quiet)
-         log(name, chalk.magenta(source), dryRunNote);
+         log(name, chalk.blue(source), dryRunNote);
       const calcResult = (file: string) => {
          const parts =    path.parse(file);
          const filename = file.substring(source.length + 1);       //ex: 'build/lib/fetch-json.js' --> 'lib/fetch-json.js'
@@ -129,9 +129,9 @@ const recursiveExec = {
             };
          };
       const results = files.filter(keep).sort().map(calcResult);
-      const execCommand = (result: Result, index: number) => {
+      const execCommand = (result: Result, i: number) => {
          if (!settings.quiet || settings.echo)
-            log(name, chalk.white(index + 1), chalk.cyanBright(result.command), dryRunNote);
+            log(name, chalk.magenta(i + 1), chalk.cyanBright(result.command), dryRunNote);
          const exec = () => {
             const task =     spawnSync(result.command, { shell: true, stdio: 'inherit' });
             const errorMsg = () => `Status: ${task.status}, Command: ${result.command}`;
