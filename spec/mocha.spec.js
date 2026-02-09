@@ -53,12 +53,12 @@ describe('Calling recursiveExec.find()', () => {
 
    it('for HTML and LESS files returns an array listing the correct files', () => {
       const folder =  'spec/fixtures';
-      const command = 'glob-bin {{file}}';
+      const command = 'glob {{file}}';
       const actual = recursiveExec.find(folder, command, { extensions: ['.html', '.less'] });
       const expected = [
          {
             basename: 'mock-file1',
-            command:  'glob-bin spec/fixtures/mock-file1.html',
+            command:  'glob spec/fixtures/mock-file1.html',
             file:     'spec/fixtures/mock-file1.html',
             filename: 'mock-file1.html',
             folder:   'spec/fixtures',
@@ -67,7 +67,7 @@ describe('Calling recursiveExec.find()', () => {
             },
          {
             basename: 'mock-file1',
-            command:  'glob-bin spec/fixtures/mock-file1.less',
+            command:  'glob spec/fixtures/mock-file1.less',
             file:     'spec/fixtures/mock-file1.less',
             filename: 'mock-file1.less',
             folder:   'spec/fixtures',
@@ -76,7 +76,7 @@ describe('Calling recursiveExec.find()', () => {
             },
          {
             basename: 'subfolder/mock-file2',
-            command:  'glob-bin spec/fixtures/subfolder/mock-file2.html',
+            command:  'glob spec/fixtures/subfolder/mock-file2.html',
             file:     'spec/fixtures/subfolder/mock-file2.html',
             filename: 'subfolder/mock-file2.html',
             folder:   'spec/fixtures',
@@ -85,7 +85,7 @@ describe('Calling recursiveExec.find()', () => {
             },
          {
             basename: 'subfolder/mock-file2',
-            command:  'glob-bin spec/fixtures/subfolder/mock-file2.less',
+            command:  'glob spec/fixtures/subfolder/mock-file2.less',
             file:     'spec/fixtures/subfolder/mock-file2.less',
             filename: 'subfolder/mock-file2.less',
             folder:   'spec/fixtures',

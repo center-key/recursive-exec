@@ -16,7 +16,7 @@
 //    $ cd recursive-exec
 //    $ npm install
 //    $ npm test
-//    $ node bin/cli.js spec/fixtures --ext=.js,.css 'npx glob-bin {{file}}'
+//    $ node bin/cli.js spec/fixtures --ext=.js,.css 'npx glob {{file}}'
 
 // Imports
 import { cliArgvUtil } from 'cli-argv-util';

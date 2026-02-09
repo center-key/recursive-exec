@@ -99,7 +99,7 @@ Command-line flags:
    - `recursive-exec build/web --ext=.js 'uglifyjs {{file}} --output dist/web/{{basename}}.min.js'`<br>
    Minimizes the JavaScript files in the **build/web** folder and saves the new files to the **dist/web** folder with the **.min.js** file extension.
 
-   - `recursive-exec src 'glob-bin {{file}}'`<br>
+   - `recursive-exec src 'glob {{file}}'`<br>
    Lists out all source files.
 
    - `recursive-exec build/web-app --ext=.js --exclude=modules 'rollup {{file}} --file dist/web-app/{{filename}} --name {{nameCamelCase}}'`<br>
