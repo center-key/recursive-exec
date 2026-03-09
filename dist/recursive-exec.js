@@ -1,4 +1,4 @@
-//! recursive-exec v1.1.4 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
+//! recursive-exec v1.1.5 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
 
 import { cliArgvUtil } from 'cli-argv-util';
 import { globSync } from 'glob';
@@ -62,7 +62,7 @@ const recursiveExec = {
         const keep = (file) => !excludes.find(exclude => file.includes(exclude));
         const toCamel = (token) => token.replace(/-./g, char => char[1].toUpperCase());
         if (!settings.quiet)
-            log(name, chalk.magenta(source), dryRunNote);
+            log(name, chalk.blue(source), dryRunNote);
         const calcResult = (file) => {
             const parts = path.parse(file);
             const filename = file.substring(source.length + 1);
@@ -86,9 +86,9 @@ const recursiveExec = {
             };
         };
         const results = files.filter(keep).sort().map(calcResult);
-        const execCommand = (result, index) => {
+        const execCommand = (result, i) => {
             if (!settings.quiet || settings.echo)
-                log(name, chalk.white(index + 1), chalk.cyanBright(result.command), dryRunNote);
+                log(name, chalk.magenta(i + 1), chalk.cyanBright(result.command), dryRunNote);
             const exec = () => {
                 const task = spawnSync(result.command, { shell: true, stdio: 'inherit' });
                 const errorMsg = () => `Status: ${task.status}, Command: ${result.command}`;
