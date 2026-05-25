@@ -1,12 +1,12 @@
-//! recursive-exec v1.1.5 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
+//! recursive-exec v1.1.6 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
 
 import { cliArgvUtil } from 'cli-argv-util';
 import { globSync } from 'glob';
 import { spawnSync } from 'node:child_process';
 import chalk from 'chalk';
-import fs from 'fs';
+import fs from 'node:fs';
 import log from 'fancy-log';
-import path from 'path';
+import path from 'node:path';
 import slash from 'slash';
 const recursiveExec = {
     assert(ok, message) {
