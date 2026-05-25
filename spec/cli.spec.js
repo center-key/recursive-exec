@@ -28,7 +28,7 @@ describe('Executing the CLI', () => {
 
    it('to optimize CSS files preserves the source folder structure', () => {
       run("recursive-exec spec/fixtures --ext=.js 'make-dir spec/target/css-min/{{path}}' --quiet");
-      run("recursive-exec spec/target/css 'csso {{file}} --output spec/target/css-min/{{basename}}.min.css'");
+      run("recursive-exec spec/target/css 'lightningcss {{file}} --output-file spec/target/css-min/{{basename}}.min.css --minify --bundle'");
       const actual = cliArgvUtil.readFolder('spec/target/css-min');
       const expected = [
          'mock-file1.min.css',
