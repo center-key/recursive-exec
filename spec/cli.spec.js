@@ -14,6 +14,7 @@ const run = (posix) => cliArgvUtil.run(pkg, posix);
 describe('Executing the CLI', () => {
 
    it('to compile LESS files to CSS preserves the source folder structure', () => {
+      fs.mkdirSync('spec/target');
       run("recursive-exec spec/fixtures --ext=.less 'lessc {{file}} spec/target/css/{{basename}}.css'");
       const actual = cliArgvUtil.readFolder('spec/target/css');
       const expected = [
