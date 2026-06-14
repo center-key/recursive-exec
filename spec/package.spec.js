@@ -35,9 +35,9 @@ describe('Library module', () => {
       const module = recursiveExec;
       const actual = Object.keys(module).sort().map(key => [key, typeof module[key]]);
       const expected = [
-         ['assert', 'function'],
-         ['cli',    'function'],
-         ['find',   'function'],
+         ['assertOk', 'function'],
+         ['cli',      'function'],
+         ['find',     'function'],
          ];
       assertDeepStrictEqual(actual, expected);
       });

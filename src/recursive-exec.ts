@@ -48,7 +48,7 @@ type Pkg = { recursiveExecConfig?: { commands?: { [command: string]: string} } }
 
 const recursiveExec = {
 
-   assert(ok: unknown, message: string | null) {
+   assertOk(ok: unknown, message: string | null) {
       if (!ok)
          throw new Error(`[recursive-exec] ${message}`);
       },
@@ -68,7 +68,7 @@ const recursiveExec = {
          cli.paramCount > 2 ?       'Extraneous parameter: ' + cli.params[2]! :
          macroName && !macroValue ? 'Command macro not defined: ' + macroName :
          null;
-      recursiveExec.assert(!error, error);
+      recursiveExec.assertOk(!error, error);
       const options: Settings = {
          echo:       cli.flagOn.echo!,
          excludes:   cli.flagMap.exclude?.split(',') ?? null,
@@ -92,7 +92,7 @@ const recursiveExec = {
          !fs.statSync(folder).isDirectory() ? 'Folder is not a folder: ' + folder :
          !command ?                           'Command template missing.' :
          null;
-      recursiveExec.assert(!error, error);
+      recursiveExec.assertOk(!error, error);
       const startTime =   Date.now();
       const source =      slash(path.normalize(folder)).replace(/\/$/, '');
       const name =        chalk.gray('recursive-exec');
@@ -135,7 +135,7 @@ const recursiveExec = {
          const exec = () => {
             const task =     spawnSync(result.command, { shell: true, stdio: 'inherit' });
             const errorMsg = () => `Status: ${task.status}, Command: ${result.command}`;
-            recursiveExec.assert(task.status === 0, errorMsg());
+            recursiveExec.assertOk(task.status === 0, errorMsg());
             };
          if (!settings.echo)
             exec();
