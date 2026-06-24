@@ -48,6 +48,8 @@ type Pkg = { recursiveExecConfig?: { commands?: { [command: string]: string} } }
 
 const recursiveExec = {
 
+   version: '{{package.version}}',
+
    assertOk(ok: unknown, message: string | null) {
       if (!ok)
          throw new Error(`[recursive-exec] ${message}`);
@@ -96,6 +98,7 @@ const recursiveExec = {
       const startTime =   Date.now();
       const source =      slash(path.normalize(folder)).replace(/\/$/, '');
       const name =        chalk.gray('recursive-exec');
+      const version =     chalk.gray('v' + recursiveExec.version);
       const dryRunNote =  settings.echo ? chalk.yellow('[dry run]') : '';
       const getExts =     () => settings.extensions!.join('|');
       const extensions =  !settings.extensions ? '' : `@(${getExts()})`;
@@ -105,7 +108,7 @@ const recursiveExec = {
       const keep =        (file: string) => !excludes.find(exclude => file.includes(exclude));
       const toCamel =     (token: string) => token.replace(/-./g, char => char[1]!.toUpperCase());  //ex: 'fetch-json' --> 'fetchJson'
       if (!settings.quiet)
-         log(name, chalk.blue(source), dryRunNote);
+         log(name, version, source, dryRunNote);
       const calcResult = (file: string) => {
          const parts =    path.parse(file);
          const filename = file.substring(source.length + 1);       //ex: 'build/lib/fetch-json.js' --> 'lib/fetch-json.js'
@@ -131,7 +134,7 @@ const recursiveExec = {
       const results = files.filter(keep).sort().map(calcResult);
       const execCommand = (result: Result, i: number) => {
          if (!settings.quiet || settings.echo)
-            log(name, chalk.magenta(i + 1), chalk.cyanBright(result.command), dryRunNote);
+            log(name, chalk.magenta(i + 1), chalk.white(result.command), dryRunNote);
          const exec = () => {
             const task =     spawnSync(result.command, { shell: true, stdio: 'inherit' });
             const errorMsg = () => `Status: ${task.status}, Command: ${result.command}`;
