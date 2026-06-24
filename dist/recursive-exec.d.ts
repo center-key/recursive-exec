@@ -1,4 +1,4 @@
-//! recursive-exec v1.1.6 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
+//! recursive-exec v1.1.7 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
 
 export type Settings = {
     echo: boolean;
@@ -16,8 +16,9 @@ export type Result = {
     command: string;
 };
 declare const recursiveExec: {
-    assert(ok: unknown, message: string | null): void;
-    cli(): void;
+    version: string;
+    assertOk(ok: unknown, message: string | null): void;
     find(folder: string, command: string, options?: Partial<Settings>): Result[];
+    cli(): void;
 };
 export { recursiveExec };
