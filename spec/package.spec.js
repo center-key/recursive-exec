@@ -41,7 +41,7 @@ describe('Library module', () => {
    const module = recursiveExec;
 
    it('is exported as an object', () => {
-      const actual =   { type: typeof recursiveExec };
+      const actual =   { type: typeof module };
       const expected = { type: 'object' };
       assertDeepStrictEqual(actual, expected);
       });
