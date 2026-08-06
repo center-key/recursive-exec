@@ -1,4 +1,4 @@
-//! recursive-exec v1.1.7 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
+//! recursive-exec v1.1.8 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
 
 import { cliArgvUtil } from 'cli-argv-util';
 import { globSync } from 'glob';
@@ -9,7 +9,7 @@ import log from 'fancy-log';
 import path from 'node:path';
 import slash from 'slash';
 const recursiveExec = {
-    version: '1.1.7',
+    version: '1.1.8',
     assertOk(ok, message) {
         if (!ok)
             throw new Error(`[recursive-exec] ${message}`);
@@ -30,18 +30,14 @@ const recursiveExec = {
         recursiveExec.assertOk(!error, error);
         const startTime = Date.now();
         const source = slash(path.normalize(folder)).replace(/\/$/, '');
-        const name = chalk.gray('recursive-exec');
-        const version = chalk.gray('v' + recursiveExec.version);
-        const dryRunNote = settings.echo ? chalk.yellow('[dry run]') : '';
         const getExts = () => settings.extensions.join('|');
         const extensions = !settings.extensions ? '' : `@(${getExts()})`;
         const globOptions = { ignore: '**/node_modules/**/*', nodir: true };
-        const files = globSync(source + '/**/*' + extensions, globOptions).map(slash);
+        const filesRaw = globSync(source + '/**/*' + extensions, globOptions).map(slash);
         const excludes = settings.excludes || [];
         const keep = (file) => !excludes.find(exclude => file.includes(exclude));
+        const files = filesRaw.filter(keep).sort();
         const toCamel = (token) => token.replace(/-./g, char => char[1].toUpperCase());
-        if (!settings.quiet)
-            log(name, version, source, dryRunNote);
         const calcResult = (file) => {
             const parts = path.parse(file);
             const filename = file.substring(source.length + 1);
@@ -64,10 +60,17 @@ const recursiveExec = {
                 command: interpolate(command),
             };
         };
-        const results = files.filter(keep).sort().map(calcResult);
-        const execCommand = (result, i) => {
+        const results = files.map(calcResult);
+        const name = chalk.gray('recursive-exec');
+        const version = chalk.gray('v' + recursiveExec.version);
+        const summary = chalk.white(`(files: ${files.length})`);
+        const dryRunNote = settings.echo ? chalk.yellow('[dry run]') : '';
+        if (!settings.quiet)
+            log(name, version, source, summary, dryRunNote);
+        const execCommand = (result, index) => {
+            const count = chalk.magenta(index + 1);
             if (!settings.quiet || settings.echo)
-                log(name, chalk.magenta(i + 1), chalk.white(result.command), dryRunNote);
+                log(name, count, chalk.white(result.command), dryRunNote);
             const exec = () => {
                 const task = spawnSync(result.command, { shell: true, stdio: 'inherit' });
                 const errorMsg = () => `Status: ${task.status}, Command: ${result.command}`;
@@ -77,9 +80,9 @@ const recursiveExec = {
                 exec();
         };
         results.forEach(execCommand);
-        const summary = `(files: ${results.length}, ${Date.now() - startTime}ms)`;
+        const duration = chalk.white(`(${Date.now() - startTime}ms)`);
         if (!settings.quiet)
-            log(name, chalk.green('done'), chalk.white(summary));
+            log(name, chalk.green('done'), duration);
         return results;
     },
     cli() {
