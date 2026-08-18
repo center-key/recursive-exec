@@ -1,4 +1,4 @@
-//! recursive-exec v1.1.8 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
+//! recursive-exec v1.1.9 ~~ https://github.com/center-key/recursive-exec ~~ MIT License
 
 import { cliArgvUtil } from 'cli-argv-util';
 import { globSync } from 'glob';
@@ -9,7 +9,7 @@ import log from 'fancy-log';
 import path from 'node:path';
 import slash from 'slash';
 const recursiveExec = {
-    version: '1.1.8',
+    version: '1.1.9',
     assertOk(ok, message) {
         if (!ok)
             throw new Error(`[recursive-exec] ${message}`);
@@ -63,7 +63,8 @@ const recursiveExec = {
         const results = files.map(calcResult);
         const name = chalk.gray('recursive-exec');
         const version = chalk.gray('v' + recursiveExec.version);
-        const summary = chalk.white(`(files: ${files.length})`);
+        const message = `(files: ${files.length})`;
+        const summary = files.length ? chalk.blue(message) : chalk.redBright(message);
         const dryRunNote = settings.echo ? chalk.yellow('[dry run]') : '';
         if (!settings.quiet)
             log(name, version, source, summary, dryRunNote);
@@ -80,7 +81,7 @@ const recursiveExec = {
                 exec();
         };
         results.forEach(execCommand);
-        const duration = chalk.white(`(${Date.now() - startTime}ms)`);
+        const duration = chalk.blue(`(${Date.now() - startTime}ms)`);
         if (!settings.quiet)
             log(name, chalk.green('done'), duration);
         return results;
