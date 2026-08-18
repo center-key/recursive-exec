@@ -105,7 +105,8 @@ const recursiveExec = {
       const results =    files.map(calcResult);
       const name =       chalk.gray('recursive-exec');
       const version =    chalk.gray('v' + recursiveExec.version);
-      const summary =    chalk.white(`(files: ${files.length})`);
+      const message =    `(files: ${files.length})`;
+      const summary =    files.length ? chalk.blue(message) : chalk.redBright(message);
       const dryRunNote = settings.echo ? chalk.yellow('[dry run]') : '';
       if (!settings.quiet)
          log(name, version, source, summary, dryRunNote);
@@ -122,7 +123,7 @@ const recursiveExec = {
             exec();
          };
       results.forEach(execCommand);
-      const duration = chalk.white(`(${Date.now() - startTime}ms)`);
+      const duration = chalk.blue(`(${Date.now() - startTime}ms)`);
       if (!settings.quiet)
          log(name, chalk.green('done'), duration);
       return results;

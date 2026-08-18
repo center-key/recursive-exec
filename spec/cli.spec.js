@@ -9,12 +9,12 @@ import fs from 'node:fs';
 // Setup
 const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
 const run = (posix) => cliArgvUtil.run(pkg, posix);
+fs.mkdirSync('spec/target');
 
 ////////////////////////////////////////////////////////////////////////////////
 describe('Executing the CLI', () => {
 
    it('to compile LESS files to CSS preserves the source folder structure', () => {
-      fs.mkdirSync('spec/target');
       run("recursive-exec spec/fixtures --ext=.less 'lessc {{file}} spec/target/css/{{basename}}.css'");
       const actual = cliArgvUtil.readFolder('spec/target/css');
       const expected = [
@@ -85,6 +85,17 @@ describe('Executing the CLI', () => {
          'subfolder/mock-file2.js',
          'subfolder/mock-file2.less',
          ];
+      assertDeepStrictEqual(actual, expected);
+      });
+
+   });
+
+describe('Error is handled correctly executing the CLI', () => {
+
+   it('when no files are found', () => {
+      run("recursive-exec spec/fixtures --ext=.bogus 'make-dir spec/target/no-files'");
+      const actual =   fs.existsSync('spec/target/no-files');
+      const expected = false;
       assertDeepStrictEqual(actual, expected);
       });
 
