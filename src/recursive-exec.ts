@@ -123,7 +123,7 @@ const recursiveExec = {
          };
       results.forEach(execCommand);
       const duration = chalk.blue(`(${Date.now() - startTime}ms)`);
-      const noFiles =  files.length ? '' : chalk.redBright.bold('[no files found]');
+      const noFiles =  files.length ? '' : chalk.redBright('[no files found]');
       if (!settings.quiet || !files.length)
          log(name, chalk.green('done'), duration, noFiles);
       return results;
