@@ -27,7 +27,7 @@ Parameters:
 * The **first** parameter is the *source* folder.
 * The **second** parameter is the *command template* string.
 
-### 2. npm package.json scripts
+### 2. npm `package.json` Scripts
 Run `recursive-exec` from the `"scripts"` section of your **package.json** file.
 
 Example **package.json** scripts:
@@ -47,7 +47,7 @@ The command template supports 6 variables:
 | `{{name}}`          | Basename of file.                             | `'fetch-json'`                   |
 | `{{nameCamelCase}}` | Basename of file converted to camel case.     | `'fetchJson'`                    |
 
-### 3. Command macros
+### 3. Command Macros
 For reusability and readability, best practice is to define commands as macros in your project's **package.json** file.
 
 Example **package.json** scripts:
@@ -62,7 +62,7 @@ Example **package.json** scripts:
 },
 ```
 
-### 4. Command-line npx
+### 4. Command-Line npx
 Example terminal command to minimize JavaScript files:
 ```shell
 $ npm install --save-dev recursive-exec
@@ -70,7 +70,7 @@ $ npx recursive-exec build/web --ext=.js "uglifyjs {{file}} --output dist/web/{{
 ```
 You can also install **recursive-exec** globally (`--global`) and then run it anywhere directly from the terminal.
 
-### 5. CLI flags
+### 5. CLI Flags
 Command-line flags:
 | Flag         | Description                                                | Value      |
 | ------------ | ---------------------------------------------------------- | ---------- |
